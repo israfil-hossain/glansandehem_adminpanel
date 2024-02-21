@@ -1,0 +1,55 @@
+import profile from "../../assets/images/profile.svg";
+const transportData = [
+  {
+    id: 101,
+    name: "Static User 1",
+    image: profile,
+    date_time: "23 Jul 2021",
+    phone: "(808) 6676 555",
+    email: "examples@gmail.com",
+    address: "123 Main St",
+    status: "pending",
+  },
+  {
+    id: 102,
+    name: "Static User 2",
+    image: profile,
+    date_time: "23 Jul 2021",
+    phone: "(808) 6676 555",
+    email: "examples@gmail.com",
+    address: "123 Main St",
+    status: "pending",
+  },
+  {
+    id: 103,
+    name: "Static User 3",
+    image: profile,
+    date_time: "23 Jul 2021",
+    address: "123 Main St",
+    phone: "(808) 6676 555",
+    email: "examples@gmail.com",
+    status: "success",
+  },
+  {
+    id: 104,
+    name: "Static User 4",
+    image: profile,
+    date_time: "23 Jul 2021",
+    address: "123 Main St",
+    phone: "(808) 6676 555",
+    email: "examples@gmail.com",
+    status: "pending",
+  },
+  {
+    id: 105,
+    name: "Static User 5",
+    image: profile,
+    date_time: "23 Jul 2021",
+    address: "123 Main St",
+    phone: "(808) 6676 555",
+    email: "examples@gmail.com",
+    status: "success",
+  },
+];
+
+export default transportData;

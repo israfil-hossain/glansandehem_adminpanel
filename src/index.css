@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&family=Play:wght@700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  html {
+    @apply font-Montserrat;
+  }
+  
+  h1 {
+    @apply text-xl font-medium capitalize;
+  }
+}
+
+.link {
+  @apply p-2.5 flex rounded-md gap-6  items-center md:cursor-pointer cursor-default duration-300 font-bold font-sans;
+}
+
+.active {
+  @apply bg-[#DCE102] text-black ;
+}
+
+.link {
+  @apply text-white; 
+}
+.active {
+  @apply text-black; 
+}
+
+.custom-tooltip-top {
+  position: absolute;
+  background-color: #9568ff;
+  /* Change the background color */
+  color: #fff;
+  /* Change the text color */
+  padding: 5px 10px;
+  border-radius: 4px;
+  top: -35px;
+  /* Adjust the tooltip position as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  margin-bottom: 10px;
+}
+
+.position-relative:hover .custom-tooltip-top {
+  opacity: 1;
+}
+.custom-tooltip-top::before {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  /* Change 'top' to 'bottom' to place the arrow at the bottom */
+  left: 50%;
+  margin-left: -5px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #9568ff;
+  /* Change 'border-bottom' to 'border-top' */
+}
