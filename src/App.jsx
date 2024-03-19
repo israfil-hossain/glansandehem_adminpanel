@@ -57,7 +57,7 @@ const App = () => {
               element: <Dashboard />,
             },
             {
-              path:"service-taken",
+              path:"service-taken/:id",
               element: <ServiceTake />
             },
             {

@@ -17,7 +17,7 @@ const AuthorizedOutlet = () => {
   return (
     <Fragment>
       <div className="flex h-screen overflow-hidden bg-[#f5f7fa]">
-        <Sidebar />
+      <Sidebar />
         <div className="flex flex-col w-full overflow-y-auto">
           {/* <Navbar toggleMenu={toggleMenu} /> */}
           <main className="flex-grow  overflow-y-auto">

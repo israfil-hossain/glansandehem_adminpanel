@@ -10,6 +10,7 @@ import { Progress } from "../components/common/Progress";
 import { setAccessToken, setRefreshToken } from "../utils/localStorageUtils";
 import signinValidationSchema from "../utils/validation/signinValidation";
 import { API } from "../api/endpoints";
+import { logo } from "../assets";
 
 const Signin = () => {
   let navigate = useNavigate();
@@ -26,7 +27,7 @@ const Signin = () => {
   };
 
   const { mutateAsync: signInMutationAsync, isLoading: isSigninLoading } =
-    useMutation((payload) => adminAPI.post(API.Login, payload));
+    useMutation((payload) => adminAPI.post(API.AdminSignIn, payload));
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     const payload = {
@@ -65,28 +66,26 @@ const Signin = () => {
     <Fragment>
       <div className="lg:h-[100vh] md:h-[80vh] lg:bg-indigo-50 flex flex-col justify-center items-center ">
         <div className="  flex-row hidden lg:flex">
-          <div
-            className="
-        bg-gradient-to-r from-emerald-400 via-emerald-500 to-yellow-300 hover:from-yellow-300
-        hover:via-emerald-400 hover:to-emerald-600 
+        <div
+          className="
+        bg-gradient-to-r from-primary via-secondary-500 to-indigo-600 hover:from-indigo-600
+        hover:via-secondary-400 hover:to-primary 
         
         py-8 lg:min-h-[350px]  lg:w-[400px] px-4  sm:rounded-l-lg sm:px-10 shadow-md hover:shadow-lg"
-          >
-            <div className="mb-6 sm:mx-auto sm:w-full sm:max-w-md flex items-center justify-center">
-              <div className="mb-6 sm:mx-auto sm:w-full sm:max-w-md flex items-center justify-center">
-                <div className="flex flex-col items-center  text-center justify-between p-8">
-                  {/* <img
-                    alt=""
-                    src={logo}
-                    width="180px"
-                    height="100px"
-                    className="items-center mt-5"
-                  /> */}
-                  {/* <img alt="" src={logo2} width="250px" height="200px " className="items-center mt-5"/> */}
-                </div>
-              </div>{" "}
-            </div>
+        >
+          <div className="flex flex-col items-center  h-full text-center  justify-center ">
+            <img
+              alt="logo"
+              src={logo}
+              width="250px"
+              height="200px "
+              className="items-center mt-5"
+            />
+            <p className="text-white leading-12 mt-5 text-3xl items-center text-center">
+              Welcome to GlansandeHem
+            </p>
           </div>
+        </div>
           <div className="bg-white py-8 lg:min-h-[350px]  lg:w-[400px] px-4 shadow-md sm:rounded-r-lg sm:px-10 hover:shadow-lg">
             <div className="mb-6 sm:mx-auto sm:w-full sm:max-w-md">
               <h2 className="text-center text-3xl font-extrabold text-gray-900">
@@ -202,20 +201,20 @@ const Signin = () => {
                 )}
               </Formik>
               <div className=" pt-5 ">
-                <Link to="/signup">
+                {/* <Link to="/signup">
                   <span className="font-medium text-yellow-600 hover:text-yellow-700">
                     {"Don't Have an account? please Signup here"}
                   </span>
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
         </div>
 
-        <div className=" lg:hidden bg-white  px-6 py-8 mt-5 shadow-md rounded-lg  hover:shadow-lg">
+        <div className=" lg:hidden bg-white w-96 px-6 py-8 mt-5 shadow-md rounded-lg  hover:shadow-lg">
           <div className="  flex justify-center items-center w-full mb-5">
-            <div className="w-20 h-20 rounded-md ">
-              {/* <img src={logo} alt="" className="" /> */}
+            <div className="w-40 h-20 rounded-md ">
+              <img src={logo} alt="" className="" />
             </div>
           </div>
           <div className="mb-6 ">
@@ -332,11 +331,11 @@ const Signin = () => {
               )}
             </Formik>
             <div className="pt-5">
-              <Link to="/signup">
+              {/* <Link to="/signup">
                 <span className="font-medium text-yellow-600 hover:text-yellow-700">
                   {"Don't Have an account? please Signup here "}
                 </span>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

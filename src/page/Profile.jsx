@@ -71,7 +71,7 @@ const Profile = () => {
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="grey" href="/">
               <Box sx={{ justifyContent: "center", display: "flex" }}>
-                <FaUserAlt size={23} className="min-w-max text-emerald-500" />
+                <FaUserAlt size={23} className="min-w-max text-[#020a38]" />
                 &nbsp; Profile
               </Box>
             </Link>

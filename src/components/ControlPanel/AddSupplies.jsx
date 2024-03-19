@@ -22,6 +22,7 @@ import {
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import addCouponValidationSchema from "../../validations/control_validations/AddCouponValidation";
 import usePatch from "../../hooks/usePatch";
+import suppliesValidation from "../../validations/control_validations/suppliesValidation";
 
 const style = {
   position: "absolute",
@@ -35,9 +36,8 @@ const style = {
   boxShadow: `3px 2px 3px 1px rgba(0, 0, 0, 0.2)`,
   p: 4,
 };
-const AddCoupon = ({ data, refetch, open, onClose }) => {
-  const [status, setStatus] = useState(data ? data?.isActive : true);
-
+const AddSupplies = ({ data, refetch, open, onClose }) => {
+  console.log({ data });
   // Create Mutation ....
   const { mutateAsync: createmutate, isLoading: createLoading } = useCreate({
     endpoint: API.AddCoupon, // Replace with your actual API endpoint
@@ -55,14 +55,13 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
 
   // Update Mutation ....
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
-    endpoint: API.UpdateCoupon + data?._id, // Replace with your actual API endpoint
+    endpoint: API.UpdateSuppliesCharge, // Replace with your actual API endpoint
     onSuccess: (data) => {
-      toast.success("Update Coupon Successfully !");
+      toast.success("Update Charge Successfully !");
       refetch();
       onClose();
     },
     onError: (error) => {
-      // Handle update error, e.g., display an error message
       console.error("Update failed", error);
       toast.error("Something went wrong !");
     },
@@ -72,15 +71,11 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       let payload = {
-        ...values, 
-        isActive: status,
+        ...values,
       };
-     
-      if (data?._id) {
-        await updateMutate(payload);
-      } else {
-        await createmutate(payload);
-      }
+
+      await updateMutate(payload);
+
       setSubmitting(false);
       resetForm();
     } catch (e) {
@@ -109,11 +104,9 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
             <div>
               <Formik
                 initialValues={{
-                  couponCode: data ? data?.couponCode : "",
-                  discountPercentage: data ? data?.discountPercentage : "",
-                  maximumDiscount: data ? data?.maximumDiscount : "",
+                  suppliesCharge: data ? data?.suppliesCharge : null,
                 }}
-                validationSchema={addCouponValidationSchema}
+                validationSchema={suppliesValidation}
                 onSubmit={handleSubmit}
               >
                 {({
@@ -135,7 +128,7 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
                       }}
                     >
                       <Typography variant="h5" component="h5">
-                        {data ? "Update " : "Add "} Coupon Settings
+                        {data ? "Update " : "Add "} Supplies Charge
                       </Typography>
                       <div style={{}}>
                         <IconButton
@@ -156,96 +149,29 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
                         </IconButton>
                       </div>
                     </Box>
-                    <Divider sx={{ mb: 2 }}>
-                      <Chip label="Settings" />
-                    </Divider>
 
-                    <div className="mt-4 pb-3">
-                      <div>
-                        <Field
-                          name="couponCode"
-                          id="couponCode"
-                          label="Coupon Code"
-                          placeholder="Type here"
-                          component={CommonInputText}
-                          onChange={handleChange}
-                          value={values.couponCode}
-                          error={touched.couponCode && errors.couponCode}
-                          className={`appearance-none  block
+                    <div>
+                      <Field
+                        name="suppliesCharge"
+                        id="suppliesCharge"
+                        label="Supplies Charge"
+                        placeholder="Type here"
+                        component={CommonInputText}
+                        onChange={handleChange}
+                        value={values.suppliesCharge}
+                        error={touched.suppliesCharge && errors.suppliesCharge}
+                        className={`appearance-none  block
                             ${
-                              touched.couponCode && errors.couponCode
+                              touched.suppliesCharge && errors.suppliesCharge
                                 ? "border-red-500"
                                 : ""
                             }`}
-                        />
-                        <ErrorMessage
-                          name="couponCode"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
-                      </div>
-                      <div>
-                        <Field
-                          name="discountPercentage"
-                          id="discountPercentage"
-                          label="Discount Price"
-                          placeholder="Type here"
-                          type="number"
-                          component={CommonInputText}
-                          onChange={handleChange}
-                          value={values.discountPercentage}
-                          error={touched.discountPercentage && errors.discountPercentage}
-                          className={`appearance-none  block
-                            ${
-                              touched.discountPercentage && errors.discountPercentage
-                                ? "border-red-500"
-                                : ""
-                            }`}
-                        />
-                        <ErrorMessage
-                          name="discountPercentage"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
-                      </div>
-                      <div>
-                        <Field
-                          name="maximumDiscount"
-                          id="maximumDiscount"
-                          label="Max Price"
-                          placeholder="Type here"
-                          type="number"
-                          component={CommonInputText}
-                          onChange={handleChange}
-                          value={values.maximumDiscount}
-                          error={touched.maximumDiscount && errors.maximumDiscount}
-                          className={`appearance-none  block
-                            ${
-                              touched.maximumDiscount && errors.maximumDiscount
-                                ? "border-red-500"
-                                : ""
-                            }`}
-                        />
-                        <ErrorMessage
-                          name="maximumDiscount"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
-                      </div>
-
-                      <div>
-                        <Field
-                          id="status-label-id"
-                          name="status"
-                          label="Status"
-                          labelId="status-label-id"
-                          setSelect={setStatus}
-                          options={Status}
-                          component={CommonSelect}
-                          value={status}
-                          width={387}
-                        />
-                      </div>
+                      />
+                      <ErrorMessage
+                        name="suppliesCharge"
+                        component="div"
+                        className="mt-2 text-sm text-red-600"
+                      />
                     </div>
 
                     <div className="flex  justify-center space-x-5 mt-5">
@@ -271,7 +197,7 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
                             />
                           )}
                         </span>
-                        {data?._id ? "Update Changes" : "Save Changes"}
+                        Update Changes
                       </button>
                     </div>
                   </Form>
@@ -285,4 +211,4 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
   );
 };
 
-export default AddCoupon;
+export default AddSupplies;

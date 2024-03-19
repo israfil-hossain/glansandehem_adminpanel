@@ -86,13 +86,19 @@ const conditionHeadings = [
 const couponHeadings = [
   {
     label: "Coupon Name",
-    key: "couponName",
+    key: "couponCode",
     className: "custom-class",
     
   },
   {
-    label: "Coupon",
-    key: "coupon",
+    label: "Discount Percentage",
+    key: "discountPercentage",
+    className: "custom-class",
+    
+  },
+  {
+    label: "Maximum Discount",
+    key: "maximumDiscount",
     className: "custom-class",
     
   },
@@ -113,9 +119,57 @@ const couponHeadings = [
   },
 ];
 
+const suppliesHeadings = [
+  {
+    label: "Supplies Charge",
+    key: "suppliesCharge",
+    className: "custom-class",
+    
+  },
+];
+
+const cleaningPriceHeadings = [
+  {
+    label: "Price Name",
+    key: "subscriptionFrequency",
+    className: "custom-class",
+    
+  },
+  {
+    label: "Cleaning Price",
+    key: "subscriptionPrice",
+    className: "custom-class",
+    
+  },
+  {
+    label: "Description",
+    key: "description",
+    className: "custom-class",
+    
+  },
+  {
+    label: "STATUS",
+    key: "isActive",
+    className: "custom-class",
+    render: (value) => (
+      
+      <div className="text-sm font-normal">
+       
+        <p className={`${value === true ? 'bg-[#CDF8D8]' : 'bg-[#fcbab1]'} w-28 rounded-lg p-1 text-center`}>
+          {value ? "Active" : "Inactive"}
+        </p>
+
+      </div>
+    ),
+  },
+];
+
+
 export { 
   topUserHeader, 
   permissionHeadings, 
   conditionHeadings,
-  couponHeadings
+  couponHeadings,
+  cleaningPriceHeadings,
+  suppliesHeadings
 };

@@ -15,45 +15,36 @@ export const API ={
     GetSingleUser : '/api/User/GetById/{DocId}' , //get 
     DeleteUser : '/api/User/DeleteById/{DocId}', // delete 
 
-    // Space Type 
-    CreateSpaceType : '/api/SpaceType/Create' , // post 
-    GetSpaceType : '/api/SpaceType/GetAll', //get 
-    GetSingleSpaceType : '/api/SpaceType/GetById/{DocId}', //get 
-    UpdateSpaceType : '/api/SpaceType/UpdateById/{DocId}', //patch 
-    DeleteSpaceType : '/api/SpaceType/DeleteById/{DocId}', //delete
+    // Cleaning Subscription Add 
+    ADDCleaningSubscription: '/api/CleaningSubscription/AddSubscription', //post 
+    GetCleaningSubscription: '/api/CleaningSubscription/GetUserSubscription', //get
+    GetAllSubscriptionType : '/api/CleaningSubscription/GetAllSubscriptionTypes', //get 
+    GetAllSubscription: '/api/CleaningSubscription/GetAll', //get 
 
-    //SpaceAccess Option 
-    SpaceAccessCreate : '/api/SpaceAccessOption/Create', //post 
-    GetSpaceAccessOption : '/api/SpaceAccessOption/GetAll', // get 
-    GetSingleAccessOption : '/api/SpaceAccessOption/GetById/{DocId}', //get 
-    UpdateAccessOption : '/api/SpaceAccessOption/UpdateById/{DocId}', //update-patch 
-    DeleteAccessOption : '/api/SpaceAccessOption/DeleteById/{DocId}', //delete 
+    // Cleaning Prices 
+    PostCleaningPrice: "/api/CleaningPrice/Create", // post 
+    GetAllCleaningPrice: "/api/CleaningPrice/GetAll", // get 
+    DropdownCleaningPrice: "/api/CleaningPrice/GetAllSubscriptionFrequenciesForDropdown", //get
 
-    // Storage  Condition Features 
-    StorageConditionCreate : '/api/api/StorageConditionFeature/Create', //post 
-    GetStorageCondition : '/api/StorageConditionFeature/GetAll', // get 
-    DeleteStorageCondition : '/api/StorageConditionFeature/DeleteById', // delete 
+    // Cleaning Bookings 
+    GetCleaningBooks: "/api/CleaningBooking/GetAll", // get 
+    
 
-    // Space Security Features 
-    SpaceSecurityFeatureCreate : '/api/SpaceSecurityFeature/Create', //post 
-    GetSpaceSecurityFeature : '/api/SpaceSecurityFeature/GetAll', //get 
-    DeleteSpaceSecurityFeature : '/api/SpaceSecurityFeature/DeleteById/{DocId}', //delete 
+    //Cleaning Time Slots 
+    PostCleaningTimeSlot : "/api/CleaningTimeSlot/Create", // post 
+    GetAllTimeSlots : "/api/CleaningTimeSlot/GetAll", // get 
+    GetTimeSlotsWeekdays: "/api/CleaningTimeSlot/GetAllByWeekdays", //get 
 
-    // Space Schedule Features  
-    SpaceScheduleFeatureCreate : '/api/SpaceScheduleFeature/Create', //post 
-    GetSpaceScheduleFeature : '/api/SpaceScheduleFeature/GetAll', //get 
-    DeleteSpaceScheduleFeature: '/api/SpaceScheduleFeature/DeleteById/{DocId}', //delete 
-
-
-    // Space For Rent 
-    SpaceForRentCreate : '/api/SpaceForRent/Create', //post 
-    GetSpaceForRent : '/api/SpaceForRent/GetAll', //get 
-    GetSingleSpaceForRent: '/api/SpaceForRent/GetById/{DocId}', //get 
-    UpdateSpaceForRent : '/api/SpaceForRent/UpdateById/{DocId}', //update
-    DeleteSpaceForRent: '/api/SpaceForRent/DeleteById/{DocId}', //delete
-
-    AddSpaceImage : '/api/SpaceForRent/AddSpaceImageById/{DocId}', //post 
-    DeleteSpaceImage : '/api/SpaceForRent/DeleteSpaceImageById/{SpaceId}/{ImageId}', //delete 
+    //Coupon 
+    VerifyCoupon : "/api/CleaningCoupon/VerifyByCode", // post 
+    GetAllCoupon:"/api/CleaningCoupon/GetAll",
+    AddCoupon:"/api/CleaningCoupon/Create",
+    GetSingleCoupon:"/api/CleaningCoupon/GetById/", 
+    UpdateCoupon:"/api/CleaningCoupon/UpdateById/",
+    DeleteCoupon:"/api/CleaningCoupon/DeleteById",
 
 
+    //Supplies Charge 
+    SuppliesCharge : "/api/Configuration/GetSuppliesCharge", // get 
+    UpdateSuppliesCharge : "/api/Configuration/SetSuppliesCharge", // get 
 }

@@ -36,9 +36,9 @@ const Dashboard = () => {
               <Box sx={{ justifyContent: "center", display: "flex" }}>
                 <AiOutlineAppstore
                   size={23}
-                  className="min-w-max text-gray-700"
+                  className="min-w-max text-[#020a38]"
                 />
-                <span className="text-gray-700 ">&nbsp; Dashboard </span>
+                <span className="text-[#020a38] ">&nbsp; Dashboard </span>
               </Box>
             </Link>
             {/* <Typography color="grey">sdfgh</Typography> */}

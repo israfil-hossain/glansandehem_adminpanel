@@ -17,10 +17,9 @@ import { months } from "../constants/Data/constantsData";
 import { userHeading } from "../constants/TableColumns/userHeadings";
 import { getCurrentMonth } from "../utils/CommonFunction";
 import { CommonSelect } from "../components/common/ui";
-import { MdDelete, MdModeEditOutline } from "react-icons/md";
-
-
-
+import { MdDelete, MdMiscellaneousServices, MdModeEditOutline, MdRemoveRedEye } from "react-icons/md";
+import { API } from "../api/endpoints";
+import { useNavigate } from 'react-router-dom';
 
 const Service = () => {
   const [page, setPage] = useState(1);
@@ -29,17 +28,26 @@ const Service = () => {
   const [roleTab, setRoleTab] = React.useState("");
   const currentMonth = getCurrentMonth();
 
-  const { data: allUsers = {}, isLoading: allUsersLoading } = useQuery([
-    `/api/User/GetAll?UserRole=${roleTab}&Page=${page}&PageSize=${size}&Email=${emailSearch}`,
+  const navigate = useNavigate();
+
+  const subscriptionEndpoint = API.GetAllSubscription + `?Page=${page}&PageSize=${size}`;
+  const { data: allService = {}, isLoading: allServiceLoading } = useQuery([
+    subscriptionEndpoint
   ]);
+  // `/api/User/GetAll?UserRole=${roleTab}&Page=${page}&PageSize=${size}&Email=${emailSearch}`
 
   const [selectedOption, setSelectedOption] = useState(currentMonth);
+
+  console.log({allService})
 
   const handleChange = (event, newValue) => {
     setRoleTab(newValue);
   };
 
   const handleView = (items) =>{
+    console.log({items})
+    navigate(`/service-taken/${items?._id}`)
+    
   }
   const handleEdit = (items) =>{
   }
@@ -47,8 +55,8 @@ const Service = () => {
   }
   const conditionActions = [
     {
-      icon: <MdModeEditOutline color="white" size={16} />,
-      tooltip: "Edit",
+      icon: <MdRemoveRedEye  color="white" size={16} />,
+      tooltip: "View",
       handler: handleView,
       bgColor: "bg-blue-500",
       hoverColor: "hover:bg-blue-700",
@@ -76,8 +84,8 @@ const Service = () => {
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="grey" href="/">
               <Box sx={{ justifyContent: "center", display: "flex" }}>
-                <FaUserAlt size={23} className="min-w-max text-emerald-500" />
-                &nbsp; Users
+                <MdMiscellaneousServices  size={23} className="min-w-max text-[#020a38]" />
+                &nbsp; <span className="text-[#020a38]">Service</span>
               </Box>
             </Link>
           </Breadcrumbs>
@@ -86,7 +94,7 @@ const Service = () => {
         <div className="">
           <div className="flex justify-between ">
             <div className="p-1 text-lg font-semibold font-sanse">
-              <CustomSearchField name={emailSearch} onChange={setEmailSearch} />
+              {/* <CustomSearchField name={emailSearch} onChange={setEmailSearch} /> */}
             </div>
             <div className="p-1">
               
@@ -116,9 +124,9 @@ const Service = () => {
               </Box>
               <Box sx={{ p: 0 }}>
                 <DefaultTable
-                  isLoading={allUsersLoading}
+                  isLoading={allServiceLoading}
                   headings={userHeading}
-                  data={allUsers?.data || []}
+                  data={allService?.data || []}
                   disablePagination={false}
                   size={size}
                   setSize={setSize}

@@ -5,19 +5,15 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { MenuContext } from "../../../context/MenuContext";
 
 // * React icons
-import { FaCar } from "react-icons/fa";
 import { useQueryClient } from "@tanstack/react-query";
 import { AiOutlineAppstore, AiOutlineControl } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import {
-  MdContactSupport,
   MdMenu,
   MdMiscellaneousServices,
   MdOutlinePayments,
 } from "react-icons/md";
-import { PiUsersThreeLight } from "react-icons/pi";
-import { RiStore2Line } from "react-icons/ri";
 import { logo, profile } from "../../../assets";
 import { useAuthUserContext } from "../../../context/AuthUserProvider";
 import { convertToTitleCase } from "../../../utils/CommonFunction";
@@ -106,15 +102,15 @@ const Sidebar = () => {
        "
       >
         <Link to="/">
-          <div className="flex items-center gap-2.5 font-medium border-b py-3 text-center justify-center  border-slate-300  mx-3 z-50 ">
-            {/* <img src={logo} alt="logo" /> */}
-            <h2 className="text-2xl sm:xl text-center font-bold text-gray-900">
+          <div className="flex items-center  bg-[#020038] font-medium border-b py-3 text-center justify-center  border-slate-300   z-50 ">
+            <img src={logo} alt="logo" />
+            {/* <h2 className="text-2xl sm:xl text-center font-bold text-gray-900">
               GlansanDehem
-            </h2>
+            </h2> */}
           </div>
         </Link>
 
-        <div className="flex flex-col bg-gray-800 h-full justify-between">
+        <div className="flex flex-col bg-[#020038] h-full justify-between">
           <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
             <li>
               <NavLink to={"/"} className="link text-white  font-sans">
@@ -155,15 +151,7 @@ const Sidebar = () => {
               </NavLink>
             </li>
 
-            <li>
-              <NavLink to={"/support"} className="link text-white font-sans">
-                <MdContactSupport
-                  size={23}
-                  className="min-w-max active:text-black  text-white "
-                />
-                Support
-              </NavLink>
-            </li>
+            
             <li>
               <NavLink to={"/profile"} className="link text-white  font-sans">
                 <BsPerson
@@ -175,7 +163,7 @@ const Sidebar = () => {
             </li>
           </ul>
           <div
-            className={`pb-20 h-40 ${
+            className={`pb-20 h-48 ${
               isOpen ? "flex" : "flex-col space-y-4"
             } p-3 items-center `}
           >

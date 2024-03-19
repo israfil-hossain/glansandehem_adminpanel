@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import addCleaningValidationSchema from "../../validations/control_validations/AddCleaningValidation";
+import { useQuery } from "@tanstack/react-query";
 
 const style = {
   position: "absolute",
@@ -36,12 +37,22 @@ const style = {
 };
 const AddCondition = ({ data, refetch, open, onClose }) => {
   const [status, setStatus] = useState(data ? data?.isActive : true);
+  const [frequency,setFrequency] = useState(data ? data?.subscriptionFrequency : "")
+
+  // get Cleaning Price Data ....
+  const {
+    data: CleaningPriceDropDown = {},
+    isLoading: CleaningPriceDropDownLoading,
+    refetch: CleaningPriceDropdownRefetch,
+  } = useQuery([API.DropdownCleaningPrice]);
+
+  console.log("Dropdown", CleaningPriceDropDown);
 
   // Create Mutation ....
-  const { mutate: createmutate, isLoading: createLoading } = useCreate({
-    endpoint: API.StorageConditionCreate, // Replace with your actual API endpoint
+  const { mutateAsync: createmutate, isLoading: createLoading } = useCreate({
+    endpoint: API.PostCleaningPrice, // Replace with your actual API endpoint
     onSuccess: (data) => {
-      toast.success("Add Condition Successfully !");
+      toast.success("Add Cleaning Price Successfully !");
       refetch();
       onClose();
     },
@@ -53,7 +64,7 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
   });
 
   // Update Mutation ....
-  const { mutate: updateMutate, isLoading: updateLoading } = useUpdate({
+  const { mutateAsync: updateMutate, isLoading: updateLoading } = useUpdate({
     endpoint: API.StorageConditionCreate, // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Add Condition Successfully !");
@@ -70,7 +81,10 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
   // Handle Submit Function .....
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      let payload = { ...values, status };
+      let payload = { 
+        ...values,
+        subscriptionFrequency:frequency,
+      };
       console.log("Payload", payload);
       if (data?._id) {
         await updateMutate(payload);
@@ -105,9 +119,9 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
             <div>
               <Formik
                 initialValues={{
-                  cleaningName: data ? data?.cleaningName : "",
-                  cleaningPrice: data ? data?.cleaningPrice : "",
-                  content: data ? data?.content : "",
+                  
+                  subscriptionPrice: data ? data?.subscriptionPrice : "",
+                  description: data ? data?.description : "",
                 }}
                 validationSchema={addCleaningValidationSchema}
                 onSubmit={handleSubmit}
@@ -131,7 +145,7 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
                       }}
                     >
                       <Typography variant="h5" component="h5">
-                        {data ? "Update " : "Add "} Price Settings
+                        {data ? "Update " : "Add "} Cleaning Price Settings
                       </Typography>
                       <div style={{}}>
                         <IconButton
@@ -159,41 +173,38 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
                     <div className="mt-4 pb-3">
                       <div>
                         <Field
-                          name="cleaningName"
-                          id="cleaningName"
-                          label="Cleaning Name"
-                          placeholder="Type here"
-                          component={CommonInputText}
-                          onChange={handleChange}
-                          value={values.cleaningName}
-                          error={touched.cleaningName && errors.cleaningName}
-                          className={`appearance-none  block
-                            ${touched.cleaningName && errors.cleaningName ? "border-red-500" : ""}`}
+                          id="status-label-id"
+                          name="subscriptionFrequency"
+                          label="Cleaning Frequency"
+                          labelId="status-label-id"
+                          setSelect={setFrequency}
+                          options={CleaningPriceDropDown?.data}
+                          component={CommonSelect}
+                          value={frequency}
+                          width={387}
                         />
-                        <ErrorMessage
-                          name="cleaningName"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
+                       
+                        
                       </div>
                       <div>
                         <Field
-                          name="cleaningPrice"
-                          id="cleaningPrice"
+                          name="subscriptionPrice"
+                          id="subscriptionPrice"
                           label="Cleaning Price"
                           placeholder="Type here"
                           type="number"
                           onChange={handleChange}
                           component={CommonInputText}
-                          value={values.cleaningPrice}
+                          value={values.subscriptionPrice}
                           className={` ${
-                            touched.cleaningPrice && errors.cleaningPrice
+                            touched.subscriptionPrice &&
+                            errors.subscriptionPrice
                               ? "border-red-500"
                               : ""
                           }`}
                         />
                         <ErrorMessage
-                          name="cleaningPrice"
+                          name="subscriptionPrice"
                           component="div"
                           className="mt-2 text-sm text-red-600"
                         />
@@ -201,22 +212,22 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
 
                       <div>
                         <Field
-                          name="content"
-                          id="content"
-                          label="Content"
+                          name="description"
+                          id="description"
+                          label="Description"
                           placeholder="Type here"
                           textformat="rich"
                           component={CommonInputText}
-                          value={values.content}
+                          value={values.description}
                           onChange={handleChange}
                           className={` ${
-                            touched.content && errors.content
+                            touched.description && errors.description
                               ? "border-red-500"
                               : ""
                           }`}
                         />
                         <ErrorMessage
-                          name="content"
+                          name="description"
                           component="div"
                           className="mt-2 text-sm text-red-600"
                         />
@@ -248,7 +259,7 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="group relative w-40 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-[#cacc57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                        className="group relative w-44 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-[#cacc57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                       >
                         <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                           {createLoading || updateLoading ? (
@@ -275,136 +286,3 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
 };
 
 export default AddCondition;
-
-{
-  /* <Formik
-                initialValues={{
-                  name: data ? data?.name : "",
-                  checkboxText: data ? data?.checkboxText : "",
-                  content: data ? data?.content : "",
-                }}
-                validationSchema={addconditionValidation}
-                onSubmit={handleSubmit}
-              >
-                {({
-                  values,
-                  handleChange,
-                  errors,
-                  touched,
-                  isSubmitting,
-                  resetForm,
-                }) => (
-                  <Form>
-                    <>{JSON.stringify(values)} </>
-                    <div className="mt-4 pb-3">
-                      <div>
-                        <Field
-                          name="name"
-                          id="name"
-                          label="Condition Name"
-                          placeholder="Type here"
-                          component={CommonInputText}
-                          onChange={handleChange}
-                          value={values.name}
-                          error={touched.name && errors.name}
-                          className={`
-                    lg:w-[400px] md:w-[350px] xs:w-full
-                    appearance-none  block
-                    ${touched.name && errors.name ? "border-red-500" : ""}`}
-                        />
-                        <ErrorMessage
-                          name="name"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
-                      </div>
-                      <div>
-                        <Field
-                          name="checkboxText"
-                          id="checkboxText"
-                          label="Checkbox text"
-                          placeholder="Type here"
-                          onChange={handleChange}
-                          component={CommonInputText}
-                          value={values.checkboxText}
-                          className={`lg:w-[400px] md:w-[350px] xs:w-full ${
-                            touched.checkboxText && errors.checkboxText
-                              ? "border-red-500"
-                              : ""
-                          }`}
-                        />
-                        <ErrorMessage
-                          name="checkboxText"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
-                      </div>
-
-                      <div>
-                        <Field
-                          name="content"
-                          id="content"
-                          label="Content"
-                          placeholder="Type here"
-                          textformat="rich"
-                          component={CommonInputText}
-                          value={values.content}
-                          onChange={handleChange}
-                          className={`lg:w-[400px] md:w-[350px] xs:w-full ${
-                            touched.content && errors.content
-                              ? "border-red-500"
-                              : ""
-                          }`}
-                        />
-                        <ErrorMessage
-                          name="content"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
-                      </div>
-
-                      <div>
-                        <Field
-                          id="status-label-id"
-                          name="status"
-                          label="Status"
-                          labelId="status-label-id"
-                          setSelect={setStatus}
-                          options={Status}
-                          component={CommonSelect}
-                          value={status}
-                          width={isLarge ? 400 : 330}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end space-x-2 mt-5">
-                      <CommonButton
-                        text="reset"
-                        type="reset"
-                        className="border border-primary hover:bg-gray-100 w-24 flex justify-center items-center"
-                        onClick={() => resetForm()}
-                      />
-
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="group relative w-40 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-[#cacc57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                      >
-                        <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                          {createLoading || updateLoading ? (
-                            <Progress />
-                          ) : (
-                            <BiLockAlt
-                              className="h-5 w-5 text-gray-600 group-hover:text-gray-800"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </span>
-                        {data?._id ? "Update Changes" : "Save Changes"}
-                      </button>
-                    </div>
-                  </Form>
-                )}
-              </Formik> */
-}

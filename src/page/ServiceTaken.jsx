@@ -8,10 +8,14 @@ import { FaUsers } from "react-icons/fa";
 import AddCoupon from "../components/ControlPanel/AddCoupon";
 import AddTime from "../components/Service/AddTime";
 import AdditionalFee from "../components/Service/AditionalFee";
+import { useParams } from 'react-router-dom';
 
 const ServiceTaken = () => {
   const [open, setOpen] = useState(false);
   const [aopen, setAOpen] = useState(false);
+  const { id } = useParams();
+
+  console.log({id})
 
   const handleOpen = () => {
     setOpen(true);

@@ -46,9 +46,9 @@ const Earnings = () => {
               <Box sx={{ justifyContent: "center", display: "flex" }}>
                 <MdOutlinePayments
                   size={23}
-                  className="min-w-max text-gray-700"
+                  className="min-w-max text-[#020a38]"
                 />
-                <span className="text-gray-700 ">&nbsp; Earnings </span>
+                <span className="text-[#020a38]">&nbsp; Earnings </span>
               </Box>
             </Link>
             {/* <Typography color="grey">sdfgh</Typography> */}

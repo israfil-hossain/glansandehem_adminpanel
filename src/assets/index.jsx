@@ -1,4 +1,4 @@
-import logo from "./Stockams.png"; 
+import logo from "./images/logo.png"; 
 import profile from "./images/profile.svg";
 import notfound from "./images/notfound.gif"; 
 import loader from "./images/loader.gif"; 
