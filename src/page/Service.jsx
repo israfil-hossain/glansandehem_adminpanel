@@ -20,6 +20,7 @@ import { CommonSelect } from "../components/common/ui";
 import { MdDelete, MdMiscellaneousServices, MdModeEditOutline, MdRemoveRedEye } from "react-icons/md";
 import { API } from "../api/endpoints";
 import { useNavigate } from 'react-router-dom';
+import AddService from "../components/Service/AddService";
 
 const Service = () => {
   const [page, setPage] = useState(1);
@@ -28,15 +29,22 @@ const Service = () => {
   const [roleTab, setRoleTab] = React.useState("");
   const currentMonth = getCurrentMonth();
 
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const subscriptionEndpoint = API.GetAllSubscription + `?Page=${page}&PageSize=${size}`;
-  const { data: allService = {}, isLoading: allServiceLoading } = useQuery([
+  const { data: allService = {}, isLoading: allServiceLoading,refetch:serviceRefetch} = useQuery([
     subscriptionEndpoint
   ]);
   // `/api/User/GetAll?UserRole=${roleTab}&Page=${page}&PageSize=${size}&Email=${emailSearch}`
 
-  const [selectedOption, setSelectedOption] = useState(currentMonth);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   console.log({allService})
 
@@ -97,14 +105,7 @@ const Service = () => {
               {/* <CustomSearchField name={emailSearch} onChange={setEmailSearch} /> */}
             </div>
             <div className="p-1">
-              
-              {/* <CommonSelect
-                labelId={"months-select"}
-                id={"months-select-id"}
-                options={months}
-                value={selectedOption}
-                setSelect={setSelectedOption}
-              /> */}
+              <button className="py-2 bg-[#020a38] text-white rounded-lg px-4 mb-2" onClick={handleOpen}>Add Service</button>
             </div>
           </div>
           <div className=" border border-primary bg-white rounded-lg p-0">
@@ -139,6 +140,7 @@ const Service = () => {
           </div>
         </div>
       </div>
+      <AddService open={open} onClose={handleClose} refetch={serviceRefetch} data={""} />
     </Fragment>
   );
 

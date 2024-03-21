@@ -14,7 +14,7 @@ const Profile = lazy(() => import("./page/Profile"));
 const Dashboard = lazy(() => import("./page/Dashboard"));
 const Support = lazy(() => import("./page/Support"));
 
-const ServiceTake = lazy(()=> import("./page/ServiceTaken"))
+const ServiceTaken = lazy(()=> import("./page/ServiceTaken"))
 
 const Signin = lazy(() => import("./page/Signin"));
 
@@ -58,7 +58,7 @@ const App = () => {
             },
             {
               path:"service-taken/:id",
-              element: <ServiceTake />
+              element: <ServiceTaken />
             },
             {
               path: "stores",
