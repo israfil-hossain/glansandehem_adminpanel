@@ -41,7 +41,6 @@ const Signup = () => {
       .catch((err) => {
         setIsLoading(false);
         toast.error("Something is Wrong,");
-        console.log("Err => ", err);
       });
   };
 

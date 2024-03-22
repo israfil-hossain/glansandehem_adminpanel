@@ -1,10 +1,10 @@
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 
 const handleEdit=(item)=>{
-    console.log("item Edit", item);
+   
 }
 const handleDelete = (item)=>{
-    console.log("Item Delted", item);
+  
 }
 const permissionActions = [
     {

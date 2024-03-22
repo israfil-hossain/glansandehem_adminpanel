@@ -36,13 +36,13 @@ const Navbar = () => {
   const token = localStorage.getItem("token");
   const id = localStorage.getItem("userid");
   const [usertype, setUsertype] = useState();
-  console.log("User tyep", usertype);
+
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const res = await UserService.getSingleUser(id);
-        console.log("===>res", res.data);
+  
         setUsertype(res?.data);
       } catch (error) {
         // Handle any error that might occur while fetching user data

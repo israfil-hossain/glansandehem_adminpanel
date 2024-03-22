@@ -10,6 +10,7 @@ import { AiOutlineAppstore, AiOutlineControl } from "react-icons/ai";
 import { BsPerson } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import {
+  MdClose,
   MdMenu,
   MdMiscellaneousServices,
   MdOutlinePayments,
@@ -28,7 +29,6 @@ const Sidebar = () => {
   const { userData } = useAuthUserContext();
   const queryClient = useQueryClient();
 
-  // console.log("UserData : ", userData);
 
   useEffect(() => {
     if (isTabletMid) {
@@ -87,7 +87,7 @@ const Sidebar = () => {
     <>
       <div
         onClick={toggleMenu}
-        className={`md:hidden fixed inset-0 min-h-screen z-[998] bg-[#f5f7fa] ${
+        className={`md:hidden fixed inset-0 min-h-screen z-[998] bg-transfarent ${
           isOpen ? "block" : "hidden"
         } `}
       ></div>
@@ -167,7 +167,7 @@ const Sidebar = () => {
               isOpen ? "flex" : "flex-col space-y-4"
             } p-3 items-center `}
           >
-            <img src={profile} alt="profile" />
+            <img src={userData?.profilePicture || profile} alt="profile" className="w-10 h-10 rounded-full p-2 border"/>
             <div className="flex-grow">
               <div
                 className={` ${
@@ -219,11 +219,14 @@ const Sidebar = () => {
         </motion.div> */}
       </motion.div>
       <div
-        className="w-8 h-8 bg-gray-700  mt-5 flex p-2 rounded-r-md mr-3 focus:bg-gray-400 hover:bg-gray-900 shadow-md  "
+        className={`w-8 h-8 ${isOpen ? "" : ""} bg-gray-700  mt-5 flex p-2 rounded-r-md mr-3 focus:bg-gray-400 hover:bg-gray-900 shadow-md  `}
         onClick={toggleMenu}
       >
         {" "}
-        <MdMenu className="text-white" />
+        {
+          !isOpen ? <MdMenu className="text-white " /> : <MdClose className="text-red-500" />
+        }
+        
       </div>
     </>
   );

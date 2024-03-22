@@ -42,7 +42,7 @@ const Profile = () => {
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
-      console.error("Update failed", error);
+   
       toast.error("Something went wrong !");
     },
   });
@@ -99,7 +99,7 @@ const Profile = () => {
                       if (updateMutation.isSuccess) {
                         resetForm();
                         setSubmitting(false);
-                        console.log("reset Form")
+                      
                       }
                     } catch (error) {
                       // Handle any errors during the mutation
@@ -349,8 +349,8 @@ const ProfileSection = ({ handleOpen, userData }) => {
           </div>
 
           <div className="py-3 mb-5 flex items-center border bg-gray-200 rounded-lg space-x-3 px-3 font-semibold  font-sans text-lg">
-            <p>Email :</p>
-            <span className=" ">{userData?.email}</span>
+            <p className="w-14">Email :</p>
+            <span className="lg:text-lg ">{userData?.email}</span>
           </div>
 
           <div className="py-3 flex border bg-gray-200 rounded-lg space-x-3 px-3 font-semibold  font-sans text-lg">
@@ -370,8 +370,8 @@ const ProfileSection = ({ handleOpen, userData }) => {
             <div className="w-48 h-48 rounded-full border border-emerald-500 bg-gray-200 flex justify-center items-center">
               <img
                 src={
-                  userData?.profile
-                    ? userData?.profile
+                  userData?.profilePicture
+                    ? userData?.profilePicture
                     : "https://res.cloudinary.com/dpc1nydxn/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1685778058/Flowentech/about2_ap8hdw.jpg"
                 }
                 alt="profileImage"

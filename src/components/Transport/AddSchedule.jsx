@@ -80,9 +80,6 @@ const AddSchedule = ({ data, refetch, open, onClose }) => {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       let payload = { ...values };
-      console.log("Payload", values);
-      
-        // await createmutate(payload);
    
       setSubmitting(false);
       resetForm();

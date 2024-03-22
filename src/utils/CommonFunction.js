@@ -23,6 +23,10 @@ const formatDateString = (date) => {
   return !!date ? dayjs(date).format("DD MMM, YYYY") : "";
 };
 
+export const formatDatewithTime = (date) => {
+  return !!date ? dayjs(date).format("DD MMM, YYYY HH:mm:ss") : "";
+}
+
 export const convertToTitleCase = (str = "") => {
   if (typeof str !== "string") return str;
 

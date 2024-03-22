@@ -60,7 +60,7 @@ const ChangePassword = ({ open, onClose, data, fetchData }) => {
               acc[key] = errorData.errors[key].msg;
               return acc;
             }, {});
-            console.log(errors);
+ 
             setErrors(errors);
           }
         } else {
@@ -80,7 +80,7 @@ const ChangePassword = ({ open, onClose, data, fetchData }) => {
             acc[key] = errorData.errors[key].msg;
             return acc;
           }, {});
-          console.log(errors);
+     
           setErrors(errors);
         } else {
           toast.error("Something went wrong");
@@ -103,7 +103,7 @@ const ChangePassword = ({ open, onClose, data, fetchData }) => {
       }
     } catch (err) {
       toast.error("Something went wrong");
-      console.log(err);
+    
       setErrors(err);
       setSubmitting(false);
     }

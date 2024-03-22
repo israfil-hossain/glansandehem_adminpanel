@@ -18,7 +18,8 @@ module.exports = {
       colors:{
         background: "#f5f7fa",
         primary : "#DCE102",
-        secondary: "#FDB3CA"
+        secondary: "#FDB3CA",
+        tertiary: "#020a38"
 
       },
       animation:{

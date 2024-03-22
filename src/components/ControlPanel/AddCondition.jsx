@@ -37,7 +37,9 @@ const style = {
 };
 const AddCondition = ({ data, refetch, open, onClose }) => {
   const [status, setStatus] = useState(data ? data?.isActive : true);
-  const [frequency,setFrequency] = useState(data ? data?.subscriptionFrequency : "")
+  const [frequency, setFrequency] = useState(
+    data ? data?.subscriptionFrequency : ""
+  );
 
   // get Cleaning Price Data ....
   const {
@@ -45,8 +47,6 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
     isLoading: CleaningPriceDropDownLoading,
     refetch: CleaningPriceDropdownRefetch,
   } = useQuery([API.DropdownCleaningPrice]);
-
-  console.log("Dropdown", CleaningPriceDropDown);
 
   // Create Mutation ....
   const { mutateAsync: createmutate, isLoading: createLoading } = useCreate({
@@ -58,7 +58,6 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
-      console.error("Update failed", error);
       toast.error("Something went wrong !");
     },
   });
@@ -73,7 +72,7 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
-      console.error("Update failed", error);
+
       toast.error("Something went wrong !");
     },
   });
@@ -81,11 +80,11 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
   // Handle Submit Function .....
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      let payload = { 
+      let payload = {
         ...values,
-        subscriptionFrequency:frequency,
+        subscriptionFrequency: frequency,
       };
-      console.log("Payload", payload);
+
       if (data?._id) {
         await updateMutate(payload);
       } else {
@@ -119,7 +118,6 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
             <div>
               <Formik
                 initialValues={{
-                  
                   subscriptionPrice: data ? data?.subscriptionPrice : "",
                   description: data ? data?.description : "",
                 }}
@@ -183,8 +181,6 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
                           value={frequency}
                           width={387}
                         />
-                       
-                        
                       </div>
                       <div>
                         <Field

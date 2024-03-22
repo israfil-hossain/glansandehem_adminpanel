@@ -38,7 +38,7 @@ const Signin = () => {
     signInMutationAsync(payload)
       .then((response) => {
         if (response.data.data) {
-          console.log(response.data.data);
+     
           setAccessToken(response.data.data?.accessToken);
           setRefreshToken(response.data.data?.refreshToken);
           toast.success("Successfully login");

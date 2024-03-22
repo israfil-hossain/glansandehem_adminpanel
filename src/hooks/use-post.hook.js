@@ -13,7 +13,7 @@ const usePost = (apiEndpoint, onSuccessCallback) =>{
         },
         onError: (errors) => {
           notifyError(errors.response.data.message);
-          console.log(errors.response.data.message);
+      
         },
       },
     ); 

@@ -2,42 +2,66 @@
 import { Box, Breadcrumbs } from "@mui/material";
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  MdCancel,
+  MdMiscellaneousServices,
+  MdRemoveRedEye,
+} from "react-icons/md";
+
+//query 
+import { useQuery } from "@tanstack/react-query";
 
 //Internal Import
-import { FaUserAlt } from "react-icons/fa";
 import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import { useQuery } from "@tanstack/react-query";
+
 import DefaultTable from "../components/common/DefaultTable";
 import CustomSearchField from "../components/common/SearchField";
 
-import { months } from "../constants/Data/constantsData";
+// headings 
 import { userHeading } from "../constants/TableColumns/userHeadings";
-import { getCurrentMonth } from "../utils/CommonFunction";
-import { CommonSelect } from "../components/common/ui";
-import { MdDelete, MdMiscellaneousServices, MdModeEditOutline, MdRemoveRedEye } from "react-icons/md";
+
+// endpoint 
 import { API } from "../api/endpoints";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
+//component 
 import AddService from "../components/Service/AddService";
+
+//hook
+import usePatch from "../hooks/usePatch";
+
+//calcen function 
+import { cancelConfirmation } from "../components/common/Toast/DeleteConfirmation";
+
+import { toast } from "react-toastify";
+
 
 const Service = () => {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [emailSearch, setEmailSearch] = useState("");
-  const [roleTab, setRoleTab] = React.useState("");
-  const currentMonth = getCurrentMonth();
+  const [Frequency, setFrequency] = React.useState(null);
+
 
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
-  const subscriptionEndpoint = API.GetAllSubscription + `?Page=${page}&PageSize=${size}`;
-  const { data: allService = {}, isLoading: allServiceLoading,refetch:serviceRefetch} = useQuery([
-    subscriptionEndpoint
-  ]);
-  // `/api/User/GetAll?UserRole=${roleTab}&Page=${page}&PageSize=${size}&Email=${emailSearch}`
+  let url =
+    API.GetAllSubscription + `?Page=${page}&PageSize=${size}`
+  if(Frequency){
+    url += `&Frequency=${Frequency}`
+  }
+  const {
+    data: allService = {},
+    isLoading: allServiceLoading,
+    refetch: serviceRefetch,
+  } = useQuery([url]);
+
+  // `/api/User/GetAll?UserRole=${Frequency}&Page=${page}&PageSize=${size}&Email=${emailSearch}`
 
   const handleOpen = () => {
     setOpen(true);
@@ -46,38 +70,51 @@ const Service = () => {
     setOpen(false);
   };
 
-  console.log({allService})
+ 
 
   const handleChange = (event, newValue) => {
-    setRoleTab(newValue);
+    setFrequency(newValue);
   };
 
-  const handleView = (items) =>{
-    console.log({items})
-    navigate(`/service-taken/${items?._id}`)
-    
-  }
-  const handleEdit = (items) =>{
-  }
-  const handleDelete = (items) =>{
-  }
+  const handleView = (items) => {
+    navigate(`/service-taken/${items?._id}`);
+  };
+
+  const { mutateAsync: cancelMutate, isLoading: cancelLoading } = usePatch({
+    endpoint: API.CancelSubscription, // Replace with your actual API endpoint
+    onSuccess: (data) => {
+      toast.success("Subscription Cancel SuccessFully !");
+      serviceRefetch();
+    },
+    onError: (error) => {
+   
+      toast.error("Something went wrong !");
+    },
+  });
+
+  const handleDelete = (items) => {
+    if (items?._id) {
+      cancelConfirmation().then((result) => {
+        if (result.isConfirmed) {
+          const payload = {
+            subscriptionId: items?._id
+          }
+          cancelMutate(payload);
+        }
+      });
+    }
+  };
   const conditionActions = [
     {
-      icon: <MdRemoveRedEye  color="white" size={16} />,
+      icon: <MdRemoveRedEye color="white" size={16} />,
       tooltip: "View",
       handler: handleView,
       bgColor: "bg-blue-500",
       hoverColor: "hover:bg-blue-700",
     },
+
     {
-      icon: <MdModeEditOutline color="white" size={16} />,
-      tooltip: "Edit",
-      handler: handleEdit,
-      bgColor: "bg-blue-500",
-      hoverColor: "hover:bg-blue-700",
-    },
-    {
-      icon: <MdDelete color="white" size={16} />,
+      icon: <MdCancel color="white" size={16} />,
       tooltip: "Delete",
       handler: handleDelete,
       bgColor: "bg-red-500",
@@ -92,7 +129,10 @@ const Service = () => {
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="grey" href="/">
               <Box sx={{ justifyContent: "center", display: "flex" }}>
-                <MdMiscellaneousServices  size={23} className="min-w-max text-[#020a38]" />
+                <MdMiscellaneousServices
+                  size={23}
+                  className="min-w-max text-[#020a38]"
+                />
                 &nbsp; <span className="text-[#020a38]">Service</span>
               </Box>
             </Link>
@@ -105,22 +145,27 @@ const Service = () => {
               {/* <CustomSearchField name={emailSearch} onChange={setEmailSearch} /> */}
             </div>
             <div className="p-1">
-              <button className="py-2 bg-[#020a38] text-white rounded-lg px-4 mb-2" onClick={handleOpen}>Add Service</button>
+              <button
+                className="py-2 bg-[#020a38] text-white rounded-lg px-4 mb-2"
+                onClick={handleOpen}
+              >
+                Add Service
+              </button>
             </div>
           </div>
           <div className=" border border-primary bg-white rounded-lg p-0">
             <Box sx={{ width: "100%" }}>
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs
-                  value={roleTab}
+                  value={Frequency}
                   onChange={handleChange}
                   aria-label="basic tabs example"
                 >
                   <Tab label="All" value={""} />
-                  <Tab label="Every Week" value={"week"} />
-                  <Tab label="Every Second Week" value={"secondweek"} />
-                  <Tab label="Every Fourth Week" value={"fourthweek"} />
-                  <Tab label="One Time User" value={"onetime"} />
+                  <Tab label="Every Week" value={"EveryWeek"} />
+                  <Tab label="Every Second Week" value={"EveryTwoWeeks"} />
+                  <Tab label="Every Fourth Week" value={"EveryFourWeeks"} />
+                  <Tab label="One Time User" value={"OneTimeOnly"} />
                 </Tabs>
               </Box>
               <Box sx={{ p: 0 }}>
@@ -140,12 +185,14 @@ const Service = () => {
           </div>
         </div>
       </div>
-      <AddService open={open} onClose={handleClose} refetch={serviceRefetch} data={""} />
+      <AddService
+        open={open}
+        onClose={handleClose}
+        refetch={serviceRefetch}
+        data={""}
+      />
     </Fragment>
   );
-
-  
 };
 
 export default Service;
-

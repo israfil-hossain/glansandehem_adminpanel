@@ -15,11 +15,13 @@ export const API ={
     GetSingleUser : '/api/User/GetById/{DocId}' , //get 
     DeleteUser : '/api/User/DeleteById/{DocId}', // delete 
 
-    // Cleaning Subscription Add 
+    // Cleaning Subscription API
     ADDCleaningSubscription: '/api/CleaningSubscription/AddSubscription', //post 
     GetCleaningSubscription: '/api/CleaningSubscription/GetUserSubscription', //get
     GetAllSubscriptionType : '/api/CleaningSubscription/GetAllSubscriptionTypes', //get 
     GetAllSubscription: '/api/CleaningSubscription/GetAll', //get 
+    CancelSubscription:'/api/CleaningSubscription/CancelSubscription', //patch
+    GetSubscriptionByID: '/api/CleaningSubscription/GetById', // get by id
 
     // Cleaning Prices 
     PostCleaningPrice: "/api/CleaningPrice/Create", // post 
@@ -28,6 +30,7 @@ export const API ={
 
     // Cleaning Bookings 
     GetCleaningBooks: "/api/CleaningBooking/GetAll", // get 
+    UpdateCleaningBooking: "/api/CleaningBooking/UpdateById", //patch
     
 
     //Cleaning Time Slots 

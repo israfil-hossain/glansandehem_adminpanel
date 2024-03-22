@@ -7,7 +7,7 @@ import {
 } from "../utils/localStorageUtils";
 import adminQueryClient from "./adminQueryClient";
 
-const PROD_ADMIN_BASE_URL = "https://sparkling-home-api.vercel.app";
+const PROD_ADMIN_BASE_URL = "https://api.app.glansandehem.se";
 
 export const ADMIN_BASE_URL =
   import.meta.env.VITE_ADMIN_BASE_URL ?? PROD_ADMIN_BASE_URL;

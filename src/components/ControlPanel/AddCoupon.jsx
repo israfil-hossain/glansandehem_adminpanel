@@ -48,7 +48,6 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
-      console.error("Update failed", error);
       toast.error("Something went wrong !");
     },
   });
@@ -63,7 +62,6 @@ const AddCoupon = ({ data, refetch, open, onClose }) => {
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
-      console.error("Update failed", error);
       toast.error("Something went wrong !");
     },
   });

@@ -32,7 +32,6 @@ const Supplies = () => {
     refetch: SuppliesRefetch,
   } = useQuery([API.SuppliesCharge]);
 
-  console.log({ suppliesData });
 
   // Delte Mutation ....
   const CouponDeleteEndpoint = API.DeleteCoupon;

@@ -1,9 +1,10 @@
 import React, { Fragment, useState } from "react";
-import { CommonButton, CommonInputText } from "../common/ui";
+import { CommonButton, CommonInputText, CommonSelect } from "../common/ui";
 
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { toast } from "react-toastify";
 
+import { useQuery } from "@tanstack/react-query";
 import { Progress } from "../common/Progress";
 import { BiLockAlt } from "react-icons/bi";
 import { useCreate, useUpdate } from "../../hooks";
@@ -19,22 +20,28 @@ import {
   Typography,
 } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import addCouponValidationSchema from "../../validations/control_validations/AddCouponValidation";
+import addServiceValidation from "../../validations/control_validations/AddServiceValidation";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%,-50%)",
-  width: "450px",
+  width: 450,
+  maxHeight: "90vh", // Set your desired maximum height
+  overflowY: "auto",
   bgcolor: "background.paper",
   border: "2px solid #F7FDFF",
   borderRadius: "10px",
   boxShadow: `3px 2px 3px 1px rgba(0, 0, 0, 0.2)`,
   p: 4,
 };
-const AddService  = ({ data, refetch, open, onClose }) => {
+const AddService = ({ data, refetch, open, onClose }) => {
   const [status, setStatus] = useState(data ? data?.isActive : true);
+  const [cleaningPrice, setCleaningPrice] = useState();
+
+  const { data: subscriptionFrequency = {}, isLoading: cleaningFrequencyLoading } =
+    useQuery([API.GetAllCleaningPrice]);
 
   // Create Mutation ....
   const { mutateAsync: createmutate, isLoading: createLoading } = useCreate({
@@ -69,7 +76,9 @@ const AddService  = ({ data, refetch, open, onClose }) => {
   // Handle Submit Function .....
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      let payload = { ...values, status };
+      let payload = {
+        ...values
+      };
 
       if (data?._id) {
         await updateMutate(payload);
@@ -104,23 +113,22 @@ const AddService  = ({ data, refetch, open, onClose }) => {
             <div>
               <Formik
                 initialValues={{
-                    userFullName: data ? data?.userFullName : "",
-                    userEmail: data ? data?.userEmail : "", 
-                    userPhoneNumber:"", 
-                    userPidNumber:"",
-                    areaInSquareMeters:0,
-                    postalCode:null,
-                    address:"",
-                    cleaningDurationInHours:null, 
-                    cleaningPrice:"", 
-                    cleaningCoupon:"",
-                    startDate:"", 
-                    hasCats:null, 
-                    hasDogs:null, 
-                    hasOtherPets:null,
-                 
+                  userFullName: data ? data?.userFullName : "",
+                  userEmail: data ? data?.userEmail : "",
+                  userPhoneNumber: "",
+                  userPidNumber: "",
+                  areaInSquareMeters: null,
+                  postalCode: null,
+                  address: "",
+                  cleaningDurationInHours: null,
+                  subscriptionFrequency: "",
+                  cleaningCoupon: null,
+                  startDate: "",
+                  hasCats: false,
+                  hasDogs: false,
+                  hasOtherPets: false,
                 }}
-                validationSchema={addCouponValidationSchema}
+                validationSchema={addServiceValidation}
                 onSubmit={handleSubmit}
               >
                 {({
@@ -130,6 +138,7 @@ const AddService  = ({ data, refetch, open, onClose }) => {
                   touched,
                   isSubmitting,
                   resetForm,
+                  setFieldValue,
                 }) => (
                   <Form>
                     {/* <>{JSON.stringify(values)}</> */}
@@ -142,7 +151,7 @@ const AddService  = ({ data, refetch, open, onClose }) => {
                       }}
                     >
                       <Typography variant="h5" component="h5">
-                        {data ? "Update " : "Add "} Additional Fees
+                        {data ? "Update " : "Add "} Service
                       </Typography>
                       <div style={{}}>
                         <IconButton
@@ -164,63 +173,365 @@ const AddService  = ({ data, refetch, open, onClose }) => {
                       </div>
                     </Box>
                     <Divider sx={{ mb: 2 }}>
-                      <Chip label="Fees" />
+                      <Chip label="Service" />
                     </Divider>
 
                     <div className="mt-4 pb-3">
-                    <div>
+                      {/* Full Name  */}
+                      <div>
                         <Field
-                          name="feesDescription"
-                          id="feesDescription"
-                          label="Additional Fees Name"
+                          name="userFullName"
+                          id="userFullName"
+                          label="Full Name"
                           type="text"
                           placeholder="Type here"
                           component={CommonInputText}
                           onChange={handleChange}
-                          value={values.feesDescription}
-                          error={
-                            touched.feesDescription && errors.feesDescription
-                          }
+                          value={values.userFullName}
+                          error={touched.userFullName && errors.userFullName}
                           className={`appearance-none  block
                             ${
-                              touched.feesDescription && errors.feesDescription
+                              touched.userFullName && errors.userFullName
                                 ? "border-red-500"
                                 : ""
                             }`}
                         />
                         <ErrorMessage
-                          name="feesDescription"
+                          name="userFullName"
                           component="div"
                           className="mt-2 text-sm text-red-600"
                         />
                       </div>
+                      
+                      {/* Email  */}
                       <div>
                         <Field
-                          name="additionalFees"
-                          id="additionalFees"
-                          label="Additional Fees"
-                          type="number"
+                          name="userEmail"
+                          id="userEmail"
+                          label="Email"
+                          type="email"
                           placeholder="Type here"
                           component={CommonInputText}
                           onChange={handleChange}
-                          value={values.additionalFees}
-                          error={
-                            touched.additionalFees && errors.additionalFees
-                          }
+                          value={values.userEmail}
+                          error={touched.userEmail && errors.userEmail}
                           className={`appearance-none  block
                             ${
-                              touched.additionalFees && errors.additionalFees
+                              touched.userEmail && errors.userEmail
                                 ? "border-red-500"
                                 : ""
                             }`}
                         />
                         <ErrorMessage
-                          name="additionalFees"
+                          name="userEmail"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
+                      
+                      {/* PhoneNumber  */}
+                      <div>
+                        <Field
+                          name="userPhoneNumber"
+                          id="userPhoneNumber"
+                          label="Phone Number"
+                          type="text"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.userPhoneNumber}
+                          error={
+                            touched.userPhoneNumber && errors.userPhoneNumber
+                          }
+                          className={`appearance-none  block
+                            ${
+                              touched.userPhoneNumber && errors.userPhoneNumber
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="userPhoneNumber"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
+                      
+                      {/* PID Number  */}
+                      <div>
+                        <Field
+                          name="userPidNumber"
+                          id="userPidNumber"
+                          label="PID Number"
+                          type="text"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.userPidNumber}
+                          error={touched.userPidNumber && errors.userPidNumber}
+                          className={`appearance-none  block
+                            ${
+                              touched.userPidNumber && errors.userPidNumber
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="userPidNumber"
                           component="div"
                           className="mt-2 text-sm text-red-600"
                         />
                       </div>
 
+                      <div>
+                        <Field
+                          name="areaInSquareMeters"
+                          id="areaInSquareMeters"
+                          label="Area in Square Meter"
+                          type="number"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.areaInSquareMeters}
+                          error={
+                            touched.areaInSquareMeters &&
+                            errors.areaInSquareMeters
+                          }
+                          className={`appearance-none  block
+                            ${
+                              touched.areaInSquareMeters &&
+                              errors.areaInSquareMeters
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="areaInSquareMeters"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
+
+                      <div>
+                        <Field
+                          name="postalCode"
+                          id="postalCode"
+                          label="Postal Code "
+                          type="number"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.postalCode}
+                          error={touched.postalCode && errors.postalCode}
+                          className={`appearance-none  block
+                            ${
+                              touched.postalCode && errors.postalCode
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="postalCode"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
+
+                      <div>
+                        <Field
+                          name="address"
+                          id="address"
+                          label="Address"
+                          type="text"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.address}
+                          error={touched.address && errors.address}
+                          className={`appearance-none  block
+                            ${
+                              touched.address && errors.address
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="address"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
+
+                      <div>
+                        <Field
+                          name="cleaningDurationInHours"
+                          id="cleaningDurationInHours"
+                          label="Cleaning Duration In Hours"
+                          type="number"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.cleaningDurationInHours}
+                          error={
+                            touched.cleaningDurationInHours &&
+                            errors.cleaningDurationInHours
+                          }
+                          className={`appearance-none  block
+                            ${
+                              touched.cleaningDurationInHours &&
+                              errors.cleaningDurationInHours
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="cleaningDurationInHours"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
+
+                      {/* Cleaning Price  */}
+                      <div>
+                        <p className="text-sm font-bold py-2">
+                          Select Cleaning Price
+                        </p>
+                        {cleaningFrequencyLoading ? (
+                          <div className="items-center flex justify-center w-full h-24">
+                            <Progress />
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {subscriptionFrequency?.data?.map((item, i) => (
+                              <div
+                                key={i}
+                                className={`bg-gray-100 h-24 items-center  cursor-pointer   rounded-lg  overflow-hidden ${
+                                  values?.subscriptionFrequency ===
+                                  item?.subscriptionFrequency
+                                    ? "border-2 border-black"
+                                    : "border"
+                                }`}
+                                onClick={async () => {
+                                  await setFieldValue(
+                                    "subscriptionFrequency",
+                                    item?.subscriptionFrequency
+                                  );
+                                 
+                                }}
+                              >
+                                {item?.subscriptionFrequency ===
+                                  "EveryTwoWeeks" && (
+                                  <div className="flex items-end justify-end  ">
+                                    <p className="  rounded-bl-full bg-tertiary rounded-tl-sm rounded-tr-48 mr-[0.2px]   bg-secondprimary px-4 py-1 text-center text-[12px] font-bold text-white">
+                                      Most Popular
+                                    </p>
+                                  </div>
+                                )}
+
+                                <div className="flex items-center justify-between p-4">
+                                  <div className="flex flex-col items-start justify-start">
+                                    <p
+                                      className={` ${
+                                        values.subscriptionFrequency ===
+                                        item.subscriptionFrequency
+                                          ? "text-md font-bold"
+                                          : "text-sm font-normal"
+                                      }`}
+                                      htmlFor={item.subscriptionFrequency}
+                                    >
+                                      {item.subscriptionFrequency}
+                                    </p>
+                                    <span className="text-sm">
+                                      {item.subscriptionPrice * 2} kr/h{" "}
+                                    </span>
+                                  </div>
+                                  <span className="items-end text-lg font-semibold">
+                                    {item.subscriptionPrice} kr/h
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+
+                            {errors.cleaningPrice && touched.cleaningPrice && (
+                              <div className="text-red-500">
+                                {errors.cleaningPrice}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Start Date  */}
+                      <div>
+                        <Field
+                          name="startDate"
+                          id="startDate"
+                          label="Select Duration"
+                          type="datetime-local"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.startDate}
+                          error={
+                            touched.startDate &&
+                            errors.startDate
+                          }
+                          className={`appearance-none  block
+                            ${
+                              touched.startDate &&
+                              errors.startDate
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="startDate"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
+
+                      <div className="flex justify-between ">
+                        <div className="border py-2 px-2 rounded-lg flex items-center justify-center space-x-2">
+                          <p className="text-[12px] font-semibold">
+                            Has Cats ?
+                          </p>
+                          <Field
+                            type="checkbox"
+                            name="hasCats"
+                            id="hasCats"
+                            label="Has Cats?"
+                            checked={values.hasCats}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="border py-2 px-2 rounded-lg flex items-center justify-center space-x-2">
+                          <p className="text-[12px] font-semibold">
+                            Has Dogs ?
+                          </p>
+                          <Field
+                            type="checkbox"
+                            name="hasDogs"
+                            id="hasDogs"
+                            label="Has Dogs?"
+                            checked={values.hasDogs}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="border py-2 px-2 rounded-lg flex items-center justify-center space-x-2">
+                          <p className="text-[12px] font-semibold">
+                            Has Others Pets?
+                          </p>
+                          <Field
+                            type="checkbox"
+                            name="hasOtherPets"
+                            id="hasOtherPets"
+                            label="Has Other Pets?"
+                            checked={values.hasOtherPets}
+                            onChange={handleChange}
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     <div className="flex  justify-center space-x-5 mt-5">

@@ -7,7 +7,7 @@ const topUserHeader = [
     className: "custom-class",
     render: (value, item) => (
       <div className="flex space-x-2">
-        {console.log(item)}
+ 
         <img
           src={item.image}
           alt="User"

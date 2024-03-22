@@ -21,6 +21,8 @@ import {
 } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import addCouponValidationSchema from "../../validations/control_validations/AddCouponValidation";
+import addAdditionalFeesValidationSchema from "../../validations/control_validations/AddAdditionalFeesValidation";
+import usePatch from "../../hooks/usePatch";
 
 const style = {
   position: "absolute",
@@ -35,48 +37,26 @@ const style = {
   p: 4,
 };
 const AdditionalFee = ({ data, refetch, open, onClose }) => {
-  const [status, setStatus] = useState(data ? data?.isActive : true);
-
-  // Create Mutation ....
-  const { mutate: createmutate, isLoading: createLoading } = useCreate({
-    endpoint: API.StorageConditionCreate, // Replace with your actual API endpoint
-    onSuccess: (data) => {
-      toast.success("Add Coupon Successfully !");
-      refetch();
-      onClose();
-    },
-    onError: (error) => {
-      // Handle update error, e.g., display an error message
-      console.error("Update failed", error);
-      toast.error("Something went wrong !");
-    },
-  });
-
   // Update Mutation ....
-  const { mutate: updateMutate, isLoading: updateLoading } = useUpdate({
-    endpoint: API.StorageConditionCreate, // Replace with your actual API endpoint
+  const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
+    endpoint: API.UpdateCleaningBooking + `/${data?.currentBooking?._id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
-      toast.success("Add Condition Successfully !");
+      toast.success("Additional Fee Update Successfully !");
       refetch();
       onClose();
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
       console.error("Update failed", error);
-      toast.error("Something went wrong !");
+      toast.error(error?.response?.data?.message);
     },
   });
 
   // Handle Submit Function .....
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      let payload = { ...values, status };
-      console.log("Payload", payload);
-      if (data?._id) {
-        await updateMutate(payload);
-      } else {
-        await createmutate(payload);
-      }
+      await updateMutate(values);
+
       setSubmitting(false);
       resetForm();
     } catch (e) {
@@ -105,11 +85,10 @@ const AdditionalFee = ({ data, refetch, open, onClose }) => {
             <div>
               <Formik
                 initialValues={{
-                    additionalFees: data ? data?.additionalFees : "",
-                    feesDescription: data ? data?.feesDescription : "", 
-                 
+                  additionalCharges: data ? data?.additionalCharges : null,
+                  remarks: data ? data?.remarks : "",
                 }}
-                validationSchema={addCouponValidationSchema}
+                validationSchema={addAdditionalFeesValidationSchema}
                 onSubmit={handleSubmit}
               >
                 {({
@@ -157,59 +136,58 @@ const AdditionalFee = ({ data, refetch, open, onClose }) => {
                     </Divider>
 
                     <div className="mt-4 pb-3">
-                    <div>
-                        <Field
-                          name="feesDescription"
-                          id="feesDescription"
-                          label="Additional Fees Name"
-                          type="text"
-                          placeholder="Type here"
-                          component={CommonInputText}
-                          onChange={handleChange}
-                          value={values.feesDescription}
-                          error={
-                            touched.feesDescription && errors.feesDescription
-                          }
-                          className={`appearance-none  block
-                            ${
-                              touched.feesDescription && errors.feesDescription
-                                ? "border-red-500"
-                                : ""
-                            }`}
-                        />
-                        <ErrorMessage
-                          name="feesDescription"
-                          component="div"
-                          className="mt-2 text-sm text-red-600"
-                        />
-                      </div>
                       <div>
                         <Field
-                          name="additionalFees"
-                          id="additionalFees"
+                          name="additionalCharges"
+                          id="additionalCharges"
                           label="Additional Fees"
                           type="number"
                           placeholder="Type here"
                           component={CommonInputText}
                           onChange={handleChange}
-                          value={values.additionalFees}
+                          value={values.additionalCharges}
                           error={
-                            touched.additionalFees && errors.additionalFees
+                            touched.additionalCharges && errors.additionalCharges
                           }
                           className={`appearance-none  block
                             ${
-                              touched.additionalFees && errors.additionalFees
+                              touched.additionalCharges && errors.additionalCharges
                                 ? "border-red-500"
                                 : ""
                             }`}
                         />
                         <ErrorMessage
-                          name="additionalFees"
+                          name="additionalCharges"
                           component="div"
                           className="mt-2 text-sm text-red-600"
                         />
                       </div>
 
+                      <div>
+                        <Field
+                          name="remarks"
+                          id="remarks"
+                          label="Additional Fees Description "
+                          type="text"
+                          textformat="rich"
+                          placeholder="Type here"
+                          component={CommonInputText}
+                          onChange={handleChange}
+                          value={values.remarks}
+                          error={touched.remarks && errors.remarks}
+                          className={`appearance-none  block
+                            ${
+                              touched.remarks && errors.remarks
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                        />
+                        <ErrorMessage
+                          name="remarks"
+                          component="div"
+                          className="mt-2 text-sm text-red-600"
+                        />
+                      </div>
                     </div>
 
                     <div className="flex  justify-center space-x-5 mt-5">
@@ -223,10 +201,10 @@ const AdditionalFee = ({ data, refetch, open, onClose }) => {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="group relative w-40 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-[#cacc57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                        className="group relative w-44 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-[#cacc57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                       >
                         <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                          {createLoading || updateLoading ? (
+                          {updateLoading ? (
                             <Progress />
                           ) : (
                             <BiLockAlt

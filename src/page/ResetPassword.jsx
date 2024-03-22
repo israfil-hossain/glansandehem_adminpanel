@@ -25,7 +25,7 @@ const ResetPassword = () => {
     setIsLoading(true);
     AuthService.resetPassword(token, values)
       .then((response) => {
-        console.log("Response", response);
+ 
 
         toast.success("Successfully Reset Password !");
         setIsLoading(false);
@@ -34,7 +34,7 @@ const ResetPassword = () => {
       .catch((err) => {
         setIsLoading(false);
         toast.error("Something went Wrong!");
-        console.log("Err => ", err);
+       
       });
   };
   return (

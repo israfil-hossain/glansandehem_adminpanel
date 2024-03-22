@@ -18,7 +18,7 @@ const useExcelDownload = () => {
           responseType: "blob", // Specify responseType as 'blob' to receive binary data
         },
       );
-      console.log('Response', response)
+  
       //check response
       if (response.status !== 200) {
         throw new Error('Failed to fetch data')
@@ -39,7 +39,7 @@ const useExcelDownload = () => {
 
       setIsLoading(false)
     } catch (err) {
-      console.log(err)
+ 
       setIsLoading(false)
       setError(err.message)
     }

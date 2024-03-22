@@ -12,15 +12,12 @@ import { API } from "../../api/endpoints";
 import {
   Backdrop,
   Box,
-  Chip,
-  Divider,
   Fade,
   IconButton,
   Modal,
   Typography,
 } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import addCouponValidationSchema from "../../validations/control_validations/AddCouponValidation";
 import usePatch from "../../hooks/usePatch";
 import suppliesValidation from "../../validations/control_validations/suppliesValidation";
 
@@ -37,7 +34,6 @@ const style = {
   p: 4,
 };
 const AddSupplies = ({ data, refetch, open, onClose }) => {
-  console.log({ data });
   // Create Mutation ....
   const { mutateAsync: createmutate, isLoading: createLoading } = useCreate({
     endpoint: API.AddCoupon, // Replace with your actual API endpoint
