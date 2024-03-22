@@ -19,5 +19,5 @@ jobs:
           script: |
             set -e
             echo "Executing docker deploy command:"
-            cd /root/composes/application/backend/backend_code && git pull
-            cd /root/composes/application/backend && docker compose up -d --build
+            cd /root/composes/application/adminpanel/adminpanel_code && git pull
+            cd /root/composes/application/adminpanel && docker compose up -d --build
