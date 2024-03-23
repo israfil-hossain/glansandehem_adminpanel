@@ -5,7 +5,7 @@ export const API ={
     AdminSignIn: "/api/Authentication/AdminSignIn",//post
     RefreshToken : '/api/Authentication/TokenRefresh',  //post 
     RevokeToken : '/api/Authentication/TokenRevoke',  //post 
-    ChangePassword : '/api/api/Authentication/ChangePassword',  //post 
+    ChangePassword : '/api/Authentication/ChangePassword',  //post 
     GetLoginUser : '/api/Authentication/GetLoggedInUser', //get 
     ResetPasswordRequest:'/api/Authentication/ResetPasswordRequest', // post 
     ResetPassword:'/api/Authentication/ResetPassword', // post 
