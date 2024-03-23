@@ -34,7 +34,6 @@ const ServiceTaken = () => {
     refetch: serviceRefetch,
   } = useQuery([url]);
 
-  console.log({ serviceData });
 
   const handleOpen = () => {
     setOpen(true);

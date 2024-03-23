@@ -58,4 +58,9 @@ export const API ={
     //Supplies Charge 
     SuppliesCharge : "/api/Configuration/GetSuppliesCharge", // get 
     UpdateSuppliesCharge : "/api/Configuration/SetSuppliesCharge", // get 
+
+    //Dashboard 
+    Dashboard : "api/Dashboard/GetCardStats", // get 
+    GetTopUser: "/api/CleaningBooking/GetTopBookingUsers"
+
 }

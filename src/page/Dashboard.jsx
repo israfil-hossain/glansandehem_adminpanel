@@ -19,13 +19,29 @@ import { earnings, months } from "../constants/Data/constantsData";
 import { topUserHeader } from "../constants/TableColumns/headings";
 import { getCurrentMonth } from "../utils/CommonFunction";
 import { CommonSelect } from "../components/common/ui";
+import { useQuery } from "@tanstack/react-query";
+import { API } from "../api/endpoints";
 
 const Dashboard = () => {
   const currentMonth = getCurrentMonth();
   const [earning, setEarnings] = useState("week");
   const [selectedOption, setSelectedOption] = useState(currentMonth);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(10); 
+
+  const {
+    data: dashboardData = {},
+    isLoading: dashboardLoading,
+    refetch: dashboardRefetch,
+  } = useQuery([API.Dashboard]);
+
+  const {
+    data: topUser = {},
+    isLoading: topUserLoading,
+    refetch: topUserRefetch,
+  } = useQuery([API.GetTopUser]);
+
+  console.log({topUser})
 
   return (
     <Fragment>
@@ -50,8 +66,8 @@ const Dashboard = () => {
               <RiStore2Line size={28} className="text-orange-400" />
             </div>
             <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">257</h2>
-              <p className="text-sm text-gray-300">Total Service registered</p>
+              <h2 className="text-xl font-bold font-sans">{dashboardData?.data?.totalSubscriptions}</h2>
+              <p className="text-sm text-gray-300">Total Subscribed Users</p>
             </div>
           </div>
           <div className="p-4 flex border border-[#4fd0d9] rounded-xl space-x-4 bg-white">
@@ -59,7 +75,7 @@ const Dashboard = () => {
               <PiUsersThreeLight size={28} className="text-[#3da9b1]" />
             </div>
             <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">2345</h2>
+              <h2 className="text-xl font-bold font-sans">{dashboardData?.data?.totalUsers}</h2>
               <p className="text-sm text-gray-300">Total Users</p>
             </div>
           </div>
@@ -68,7 +84,7 @@ const Dashboard = () => {
               <MdOutlinePayments size={28} className="text-[#ee80a3]" />
             </div>
             <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">$45,678.00</h2>
+              <h2 className="text-xl font-bold font-sans">{dashboardData?.data?.totalEarnings} Kr</h2>
               <p className="text-sm text-gray-300">Total Earnings</p>
             </div>
           </div>
@@ -77,15 +93,15 @@ const Dashboard = () => {
               <FiCheckCircle size={28} className="text-[#37CF02]" />
             </div>
             <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">180</h2>
-              <p className="text-sm text-gray-300">Active Order</p>
+              <h2 className="text-xl font-bold font-sans">{dashboardData?.data?.totalActiveBookings}</h2>
+              <p className="text-sm text-gray-300">Active Booking</p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
-          <div className="lg:col-span-8 col-span-12 border border-primary  p-5 rounded-lg ">
-            <div className="flex justify-between">
+        <div className="w-full gap-8">
+          {/* <div className="lg:col-span-8 col-span-12 border border-primary  p-5 rounded-lg "> */}
+            {/* <div className="flex justify-between">
               <p className="text-[16px] font-bold font-sans">Earnings</p>
               <Box sx={{ minWidth: 120 }}>
                 <CommonSelect
@@ -99,28 +115,28 @@ const Dashboard = () => {
             </div>
             <div className="h-full">
               <IncomeAreaChart slot={earning} height={340} />
-            </div>
-          </div>
-          <div className="lg:col-span-4 col-span-12">
+            </div> */}
+          {/* </div> */}
+          <div className="lg:col-span-6 col-span-12">
             <div className="flex justify-between space-x-5 bg-white border-secondary  border border-b-0 rounded-t-lg p-2">
               <div className="p-1 text-lg font-semibold font-sanse">
                 Top Users
               </div>
               <div className="p-1">
-                <CommonSelect
+                {/* <CommonSelect
                   labelId={"months-select"}
                   id={"months-select-id"}
                   options={months}
                   value={selectedOption}
                   setSelect={setSelectedOption}
-                />
+                /> */}
               </div>
             </div>
             <div className="min-h-80  border border-secondary">
               <DefaultTable
-                isLoading={false}
+                isLoading={topUserLoading}
                 headings={topUserHeader}
-                data={userData?.topUser}
+                data={topUser?.data}
                 disablePagination={true}
                 size={size}
                 setSize={setSize}
