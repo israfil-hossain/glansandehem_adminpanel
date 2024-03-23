@@ -4,31 +4,38 @@ import { BiLockAlt } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Progress } from "../components/common/Progress";
-import AuthService from "../service/AuthService";
+
 import forgotPasswordValidationSchema from "../utils/validation/forgotPasswordValidation";
+import { useCreate } from "../hooks";
+import { API } from "../api/endpoints";
 
 const ForgotPassword = () => {
   const initialValues = {
     email: "",
   };
   let navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { mutateAsync: resetMutate, isLoading } = useCreate({
+    endpoint: API.ResetPasswordRequest, // Replace with your actual API endpoint
+    onSuccess: (data) => {
+      toast.success("Successfully Reset Password Link Send by Your Email !");
+      navigate("/login");
+    },
+    onError: (error) => {
+      // Handle update error, e.g., display an error message
+      console.error("Update failed", error);
+      toast.error("Something went wrong !");
+    },
+  });
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    setIsLoading(true);
-    AuthService.forgotPassword(values)
-      .then((response) => {
-  
-
-        toast.success("Successfully Reset Password Link Send by Your Email !");
-        setIsLoading(false);
-        navigate("/login");
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        toast.error("Something went Wrong!");
-  
-      });
+    try {
+      await resetMutate(values);
+      setSubmitting(false);
+    } catch (e) {
+      setSubmitting(true);
+      console.log("Error during Create ", e);
+    }
   };
   return (
     <Fragment>

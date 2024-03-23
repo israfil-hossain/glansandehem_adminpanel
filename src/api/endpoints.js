@@ -7,13 +7,21 @@ export const API ={
     RevokeToken : '/api/Authentication/TokenRevoke',  //post 
     ChangePassword : '/api/api/Authentication/ChangePassword',  //post 
     GetLoginUser : '/api/Authentication/GetLoggedInUser', //get 
-    GetProfile : '/api/Authentication/UpdateProfilePicture', // patch 
+    ResetPasswordRequest:'/api/Authentication/ResetPasswordRequest', // post 
+    ResetPassword:'/api/Authentication/ResetPassword', // post 
 
-    // User...... 
-    PostUser : '/api/User/Create', //post 
-    GetUser : '/api/User/GetAll', //get  
-    GetSingleUser : '/api/User/GetById/{DocId}' , //get 
-    DeleteUser : '/api/User/DeleteById/{DocId}', // delete 
+
+
+
+    // Application User...... 
+    PostUser : '/api/ApplicationUser/Create', //post 
+    GetUser : '/api/ApplicationUser/GetAll', //get  
+    GetSingleUser : '/api/ApplicationUser/GetById/' , //get 
+    UpdateSingleUser : '/api/ApplicationUser/UpdateById/' , //patch 
+    DeleteUser : '/api/ApplicationUser/DeleteById/', // delete 
+    UpdateProfile : '/api/ApplicationUser/UpdateOwnProfile', // patch 
+    UpdateProfilePicture : '/api/ApplicationUser/UpdateOwnProfilePicture', // patch 
+
 
     // Cleaning Subscription API
     ADDCleaningSubscription: '/api/CleaningSubscription/AddSubscription', //post 

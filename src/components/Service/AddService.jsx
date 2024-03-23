@@ -37,8 +37,6 @@ const style = {
   p: 4,
 };
 const AddService = ({ data, refetch, open, onClose }) => {
-  const [status, setStatus] = useState(data ? data?.isActive : true);
-  const [cleaningPrice, setCleaningPrice] = useState();
 
   const { data: subscriptionFrequency = {}, isLoading: cleaningFrequencyLoading } =
     useQuery([API.GetAllCleaningPrice]);

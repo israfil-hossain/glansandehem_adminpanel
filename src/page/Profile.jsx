@@ -21,9 +21,11 @@ import { passwordValidation } from "../validations";
 import { API } from "../api/endpoints";
 import { Progress } from "../components/common/Progress";
 import useCreate from "../hooks/useCreate";
+import usePatch from "../hooks/usePatch";
 
 const Profile = () => {
-  const { userData } = useAuthUserContext();
+  const { userData,userRefetch } = useAuthUserContext();
+  console.log("userData", userData);
 
   const [open, setOpen] = useState(false);
 
@@ -33,20 +35,19 @@ const Profile = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRetypePassword, setShowRetypePassword] = useState(false);
 
- 
-
   const updateMutation = useCreate({
     endpoint: API.ChangePassword, // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Password Changed Successfully !");
+      userRefetch();
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
-   
+      console.error("Update failed", error);
       toast.error("Something went wrong !");
     },
   });
-  const { isLoading, error, } = updateMutation;
+  const { isLoading, error } = updateMutation;
 
   const togglePasswordVisibility = (field) => {
     switch (field) {
@@ -71,7 +72,7 @@ const Profile = () => {
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="grey" href="/">
               <Box sx={{ justifyContent: "center", display: "flex" }}>
-                <FaUserAlt size={23} className="min-w-max text-[#020a38]" />
+                <FaUserAlt size={23} className="min-w-max text-emerald-500" />
                 &nbsp; Profile
               </Box>
             </Link>
@@ -80,7 +81,7 @@ const Profile = () => {
 
         <div className="mt-10">
           <div className="lg:flex  justify-around  lg:space-x-4 lg:space-y-0 space-y-5 rounded-md px-4 py-4 w-full ">
-            <ProfileSection userData={userData} handleOpen={handleOpen} />
+            <ProfileSection userData={userData} handleOpen={handleOpen} refetch={userRefetch}/>
 
             <div className="lg:w-1/2  rounded-xl px-4 w-full  py-4 bg-white">
               <div>
@@ -94,18 +95,17 @@ const Profile = () => {
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
                     try {
                       await updateMutation.mutate(values);
-                
+
                       // Only resetForm and setSubmitting if the mutation was successful
                       if (updateMutation.isSuccess) {
                         resetForm();
                         setSubmitting(false);
-                      
+                        console.log("reset Form");
                       }
                     } catch (error) {
                       // Handle any errors during the mutation
-                      console.error('Error during mutation:', error);
+                      console.error("Error during mutation:", error);
                     }
-                
                   }}
                 >
                   {({
@@ -302,6 +302,7 @@ const Profile = () => {
             data={userData}
             open={open}
             onClose={handleClose}
+            refetch={userRefetch}
             // fetchData={fetchData}
           />
         </div>
@@ -310,9 +311,23 @@ const Profile = () => {
   );
 };
 
-const ProfileSection = ({ handleOpen, userData }) => {
+const ProfileSection = ({ handleOpen, userData,refetch}) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const { mutateAsync: updateProfile, isLoading: createLoading } = usePatch({
+    endpoint: API.UpdateProfilePicture, // Replace with your actual API endpoint
+    isMultiPart: true,
+
+    onSuccess: (data) => {
+      toast.success("Profile Picture Update Successfully !");
+      refetch();
+    },
+    onError: (error) => {
+      // Handle update error, e.g., display an error message
+      console.error("Update failed", error);
+      toast.error("Something went wrong !");
+    },
+  });
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setSelectedImage(URL.createObjectURL(file));
@@ -321,11 +336,11 @@ const ProfileSection = ({ handleOpen, userData }) => {
   const uploadImage = async (file) => {
     try {
       const formData = new FormData();
-      formData.append("image", file);
+      formData.append("profilePicture", file);
 
       // Replace 'PUT_API_ENDPOINT' with the actual API endpoint URL for image upload
-      await UserService.UploadImage(userData?._id, formData);
-      toast.success("Profile Image Upload Successfully");
+      updateProfile(formData);
+      // toast.success("Profile Image Upload Successfully");
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -349,13 +364,13 @@ const ProfileSection = ({ handleOpen, userData }) => {
           </div>
 
           <div className="py-3 mb-5 flex items-center border bg-gray-200 rounded-lg space-x-3 px-3 font-semibold  font-sans text-lg">
-            <p className="w-14">Email :</p>
-            <span className="lg:text-lg ">{userData?.email}</span>
+            <p className="w-16">Email :</p>
+            <span className=" ">{userData?.email}</span>
           </div>
 
           <div className="py-3 flex border bg-gray-200 rounded-lg space-x-3 px-3 font-semibold  font-sans text-lg">
             <p>Address :</p>
-            <span className="">{userData?.address}</span>
+            <span className="">{userData?.address || "N/A"}</span>
           </div>
         </div>
 
@@ -375,7 +390,7 @@ const ProfileSection = ({ handleOpen, userData }) => {
                     : "https://res.cloudinary.com/dpc1nydxn/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,bo_5px_solid_red,b_rgb:262c35/v1685778058/Flowentech/about2_ap8hdw.jpg"
                 }
                 alt="profileImage"
-                className="w-48 h-48 rounded-full border border-emerald-500"
+                className="w-48 h-48 p-4 rounded-full border border-emerald-500"
               />
             </div>
           )}

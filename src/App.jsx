@@ -22,14 +22,28 @@ const Stores = lazy(() => import("./page/Stores"));
 const Earnings = lazy(() => import("./page/Earnings"));
 const ControlPanel = lazy(() => import("./page/ControlPanel"));
 const Transport = lazy(() => import("./page/Transport"));
-
+const ForgotPassword = lazy(()=> import("./page/ForgotPassword"));
+const ResetPassword = lazy(()=>import("./page/ResetPassword"));
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <AppOutlet />,
+
       children: [
+        {
+          path:"/forgotpassword",
+          exact: true,
+          element:<ForgotPassword />
+        },
+        {
+          path:"/reset-password/:id",
+          exact: true,
+          element:<ResetPassword />
+        },
+
+
         //auth
         {
           path: "login",
@@ -39,6 +53,7 @@ const App = () => {
               path: "",
               element: <Signin />,
             },
+            
             
             {
               path: "*",

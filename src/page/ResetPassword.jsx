@@ -5,38 +5,48 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Progress } from "../components/common/Progress";
-import AuthService from "../service/AuthService";
 import resetPasswordValidationSchema from "../utils/validation/resetPasswordValidation";
+import { useCreate } from "../hooks";
+import { API } from "../api/endpoints";
 
 const ResetPassword = () => {
   const initialValues = {
     confirmPassword: "",
     newPassword: "",
+    resetToken: "",
   };
   let navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
-  const { token } = useParams();
+  const { id } = useParams();
 
+  // Create Mutation ....
+  const { mutateAsync: resetMutate, isLoading } = useCreate({
+    endpoint: API.ResetPassword, // Replace with your actual API endpoint
+    onSuccess: (data) => {
+      toast.success("Successfully Reset Password !");
+      navigate("/login");
+    },
+    onError: (error) => {
+      // Handle update error, e.g., display an error message
+      console.error("Update failed", error);
+      toast.error("Something went wrong !");
+    },
+  });
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    setIsLoading(true);
-    AuthService.resetPassword(token, values)
-      .then((response) => {
- 
-
-        toast.success("Successfully Reset Password !");
-        setIsLoading(false);
-        navigate("/login");
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        toast.error("Something went Wrong!");
-       
-      });
+    try {
+      const payload = {
+        newPassword: values?.newPassword,
+        resetToken: id,
+      };
+      await resetMutate(payload);
+      setSubmitting(false);
+    } catch (e) {}
   };
+
   return (
     <Fragment>
       <div className=" flex justify-center items-start w-full lg:pt-16 pt-5">
