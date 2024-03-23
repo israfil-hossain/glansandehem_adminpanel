@@ -278,7 +278,7 @@ const ServiceTaken = () => {
                 </div>
 
                 <div className="flex  space-x-5 items-center">
-                  <p className=" py-1 bg-slate-200  px-4 rounded-lg">
+                  <p className=" py-1 bg-slate-200  px-3 rounded-lg">
                     Booking Status :{" "}
                   </p>
                   <p
@@ -286,38 +286,42 @@ const ServiceTaken = () => {
                       serviceData?.data?.currentBooking?.bookingStatus ===
                       "BookingCancelled"
                         ? "bg-red-300"
+                        : serviceData?.data?.currentBooking?.bookingStatus === "BookingServed"
+                        ? "bg-blue-500"
                         : serviceData?.data?.currentBooking?.bookingStatus ===
-                          "BookingConfirmed"
+                          "BookingCompleted"
                         ? "bg-[#a5f9a9a2]" // Use the intended background color for confirmed bookings
                         : "bg-primary"
                     } rounded-lg`}
                   >
-                    {serviceData?.data?.currentBooking?.bookingStatus ===
-                    "BookingCancelled"
+                    {
+                      serviceData?.data?.currentBooking?.bookingStatus === "BookingCancelled"
                       ? "Cancelled"
+                      :serviceData?.data?.currentBooking?.bookingStatus ===
+                        "BookingServed" ? "Served"
                       : serviceData?.data?.currentBooking?.bookingStatus ===
-                        "BookingConfirmed"
-                      ? "Confirmed" // Use the intended background color for confirmed bookings
+                        "BookingCompleted"
+                      ? "Completed" // Use the intended background color for confirmed bookings
                       : "Processing"}
                   </p>
                 </div>
-                {(!serviceData?.data?.currentBooking?.bookingStatus ===
-                  "BookingCancelled" ||
-                  "BookingConfirmed") && (
-                  <div className="flex space-x-5 items-center mt-5 py-2 px-4 bg-pink-50 rounded-lg">
-                    <p>Booking : </p>
+                
+              </div>
+              {(serviceData?.data?.currentBooking?.bookingStatus ===
+                  "BookingInitiated") && (
+                  <div className="flex space-x-5  w-96 items-center mt-5 py-2 mx-5 px-5 bg-pink-50 rounded-lg">
+                    <p>Confirmed Booking For This User : </p>
                     <FormGroup>
                       <FormControlLabel
                         disabled={false}
                         control={
                           <Switch checked={isEnabled} onChange={handleChange} />
                         }
-                        label="Label"
+                        label="Confirmed"
                       />
                     </FormGroup>
                   </div>
                 )}
-              </div>
             </div>
           </div>
         </div>

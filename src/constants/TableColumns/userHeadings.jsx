@@ -92,15 +92,19 @@ const userHeading = [
           className={`px-3 py-1 text-[12px] w-[115px] ${
             item?.currentBooking?.bookingStatus === "BookingCancelled"
               ? "bg-red-300"
-              : item?.currentBooking?.bookingStatus === "BookingConfirmed"
-              ? "bg-[#a5f9a9a2]" // Use the intended background color for confirmed bookings
+              : item?.currentBooking?.bookingStatus === "BookingServed"
+              ? "bg-blue-500"
+              : item?.currentBooking?.bookingStatus === "BookingCompleted"
+              ? "bg-[#a5f9a9a2]"
               : "bg-primary"
           } rounded-lg`}
         >
           {item?.currentBooking?.bookingStatus === "BookingCancelled"
             ? "Cancelled"
-            : item?.currentBooking?.bookingStatus === "BookingConfirmed"
-            ? "Confirmed" // Use the intended background color for confirmed bookings
+            : item?.currentBooking?.bookingStatus === "BookingServed"
+            ? "Served"
+            : item?.currentBooking?.bookingStatus === "BookingCompleted"
+            ? "Completed"
             : "Processing"}
         </p>
       </div>
