@@ -19,7 +19,6 @@ import {
 } from "../assets/images/icons";
 
 import { earnings, months } from "../constants/Data/constantsData";
-import { userHeading } from "../constants/TableColumns/userHeadings";
 import { getCurrentMonth } from "../utils/CommonFunction";
 import { CommonSelect, CommonButton } from "../components/common/ui";
 import { useQuery } from "@tanstack/react-query";

@@ -37,7 +37,7 @@ export const convertToTitleCase = (str = "") => {
 };
 
 export const Duration = (size) => {
-  if (size < 40) {
+  if (size < 41) {
     return 2;
   } else if (size >= 41 && size <= 60) {
     return 2.5;
