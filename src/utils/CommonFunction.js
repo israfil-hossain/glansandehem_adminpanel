@@ -36,6 +36,35 @@ export const convertToTitleCase = (str = "") => {
     .replace(/_/g, " ");
 };
 
+export const Duration = (size) => {
+  if (size < 40) {
+    return 2;
+  } else if (size >= 41 && size <= 60) {
+    return 2.5;
+  } else if (size >= 61 && size <= 79) {
+    return 3;
+  } else if (size >= 80 && size <= 100) {
+    return 3.5;
+  } else if (size >= 101 && size <= 119) {
+    return 4;
+  } else if (size >= 120 && size <= 150) {
+    return 4.5;
+  } else if (size >= 151 && size <= 175) {
+    return 5;
+  } else if (size >= 176 && size <= 195) {
+    return 5.5;
+  } else if (size >= 196 && size <= 215) {
+    return 6;
+  } else if (size >= 216 && size <= 235) {
+    return 6.5;
+  } else if (size >= 236 && size <= 255) {
+    return 7;
+  } else if (size >= 256 && size <= 285) {
+    return 7.5;
+  } else if (size >= 286) {
+    return 8;
+  }
+};
 
 
 export { formatDateString, getCurrentMonth, isLargeScreen };

@@ -2,6 +2,8 @@ import { FaUser } from "react-icons/fa";
 import { calender, profile } from "../../assets/images/icons";
 import { formatDateString } from "../../utils/CommonFunction";
 import { CiMail } from "react-icons/ci";
+import { logo } from "../../assets";
+
 
 const topUserHeader = [
   {
@@ -9,18 +11,6 @@ const topUserHeader = [
     key: "x",
     render: (value, item) => (
       <div className="flex space-x-2 xs:w-40  items-center">
-        {item?.bookingUser?.profilePicture ? (
-          <img
-            src={item?.subscribedUser?.profilePicture || profile}
-            alt="User"
-            style={{ width: 30, height: 30, borderRadius: "50%" }}
-          />
-        ) : (
-          <div className="bg-gray-200 rounded-full flex justify-center items-center p-2">
-            <FaUser size={14} />
-          </div>
-        )}
-
         <p>{item?.bookingUser?.fullName}</p>
       </div>
     ),
@@ -41,7 +31,7 @@ const topUserHeader = [
     key: "email",
     className: "custom-class",
     render: (value, item) => (
-      <div className="flex space-x-2 items-center w-44 overflow-hidden">
+      <div className="flex space-x-2 items-center ">
         <CiMail className="" size={14} />
         <p className="overflow-x-auto w-full">{item?.bookingUser?.email}</p>
       </div>

@@ -4,7 +4,7 @@ import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 
 //icons
-import { FiDownload } from "react-icons/fi";
+import { FiCheckCircle, FiDownload } from "react-icons/fi";
 import { MdOutlinePayments } from "react-icons/md";
 
 // Internal Import
@@ -12,30 +12,78 @@ import IncomeAreaChart from "../components/Dashboard/IncomeAreaChart";
 import DefaultTable from "../components/common/DefaultTable";
 import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 
-import userData from "../constants/Data/dashboardData";
+import CsvDownloader from "react-csv-downloader";
 
 import {
-  greenMoney,
   orangeMoney,
-  redMoney,
-  yellowMoney,
 } from "../assets/images/icons";
 
 import { earnings, months } from "../constants/Data/constantsData";
 import { userHeading } from "../constants/TableColumns/userHeadings";
 import { getCurrentMonth } from "../utils/CommonFunction";
-import { CommonSelect,CommonButton } from "../components/common/ui";
+import { CommonSelect, CommonButton } from "../components/common/ui";
+import { useQuery } from "@tanstack/react-query";
+import { API } from "../api/endpoints";
+import { earningHeadings } from "../constants/TableColumns/earningHeadings";
 
 const Earnings = () => {
   const currentMonth = getCurrentMonth();
   const [earning, setEarnings] = useState("week");
-  const [selectedOption, setSelectedOption] = useState(currentMonth);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
+
+  // GetAllCleaningBooking
+  const {
+    data: dashboardData = {},
+    isLoading: dashboardLoading,
+    refetch: dashboardRefetch,
+  } = useQuery([API.Dashboard]);
+
+  const { data: bookingData = {}, isLoading: bookingLoading } = useQuery([
+    API.GetAllCleaningBooking + `?Page=${page}&PageSize=${size}`,
+  ]);
 
   const handleChange = (event) => {
     setEarnings(event.target.value);
   };
+
+
+  const downloadData = bookingData?.data?.map((item) => ({
+    fullName: item?.bookingUser?.fullName,
+    email: item?.bookingUser?.email,
+    bookingStatus: item?.bookingStatus,
+    cleaningDate: item?.cleaningDate,
+    cleaningDuration: item?.cleaningDuration,
+    cleaningPrice: item?.cleaningPrice,
+    discountAmount: item?.discountAmount,
+    paymentStatus: item?.paymentStatus,
+    additionalCharges: item?.additionalCharges,
+    remarks: item?.remarks,
+    suppliesCharges: item?.suppliesCharges,
+    totalAmount: item?.totalAmount,
+    totalPaid: item?.paymentReceive?.totalPaid,
+    vatAmount: item?.vatAmount,
+  }));
+
+  // console.log("Download Data", downloadData);
+
+  const headers = [
+    { displayName: "Full Name", id: "fullName" },
+    { displayName: "Email", id: "email" },
+    { displayName: "Booking Status", id: "bookingStatus" },
+    { displayName: "Cleaning Date", id: "cleaningDate" },
+    { displayName: "Cleaning Duration", id: "cleaningDuration" },
+    { displayName: "Cleaning Price", id: "cleaningPrice" },
+    { displayName: "Discount Amount", id: "discountAmount" },
+    { displayName: "Payment Status", id: "paymentStatus" },
+    { displayName: "Additional Charges", id: "additionalCharges" },
+    { displayName: "Remarks", id: "remarks" },
+    { displayName: "Supplies Charges", id: "suppliesCharges" },
+    { displayName: "Total Amount", id: "totalAmount" },
+    { displayName: "Total Paid", id: "totalPaid" },
+    { displayName: "VAT Amount", id: "vatAmount" },
+  ];
+
 
   return (
     <Fragment>
@@ -60,35 +108,22 @@ const Earnings = () => {
               <img src={orangeMoney} className="" alt="redmoney" />
             </div>
             <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">$257,34.45</h2>
+              <h2 className="text-xl font-bold font-sans">
+                {dashboardData?.data?.totalEarnings} kr
+              </h2>
               <p className="text-sm text-gray-300">Total Earnings</p>
             </div>
           </div>
-          <div className="p-4 flex border border-primary rounded-xl space-x-4 bg-white">
-            <div className="p-3 border border-primary shadow-md rounded-xl">
-              <img src={yellowMoney} className="" alt="redmoney" />
-            </div>
-            <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">$3000</h2>
-              <p className="text-sm text-gray-300">Earnings This Month</p>
-            </div>
-          </div>
-          <div className="p-4 flex border border-[#ef779d] rounded-xl space-x-4 bg-white">
-            <div className="p-3 border border-[#fab9ce] shadow-md rounded-xl">
-              <img src={redMoney} className="" alt="redmoney" />
-            </div>
-            <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">$45,678.00</h2>
-              <p className="text-sm text-gray-300">Withdraw Money</p>
-            </div>
-          </div>
+
           <div className="p-4 flex border border-[#37CF02] rounded-xl space-x-4 bg-white">
             <div className="p-3 border border-[#90f06d] shadow-md rounded-xl">
-              <img src={greenMoney} className="" alt="redmoney" />
+              <FiCheckCircle size={28} className="text-[#37CF02]" />
             </div>
             <div className="flex flex-col ">
-              <h2 className="text-xl font-bold font-sans">$5080.78</h2>
-              <p className="text-sm text-gray-300">Available Balance</p>
+              <h2 className="text-xl font-bold font-sans">
+                {dashboardData?.data?.totalActiveBookings}
+              </h2>
+              <p className="text-sm text-gray-300">Active Booking</p>
             </div>
           </div>
         </div>
@@ -109,6 +144,7 @@ const Earnings = () => {
               </Box>
             </div>
             <div className="h-full">
+              <p>Use in Future...</p>
               <IncomeAreaChart slot={earning} height={200} />
             </div>
           </div>
@@ -118,34 +154,24 @@ const Earnings = () => {
                 Transaction History
               </div>
               <div className="flex p-1 space-x-2">
-                <CommonSelect
-                  labelId={"months-select"}
-                  id={"months-select-id"}
-                  options={months}
-                  value={selectedOption}
-                  setSelect={setSelectedOption}
-                />
-                <CommonSelect
-                  labelId={"months-select"}
-                  id={"months-select-id"}
-                  options={months}
-                  value={selectedOption}
-                  setSelect={setSelectedOption}
-                />
                 <div className="flex justify-center items-center">
-                  <CommonButton
-                    className="bg-primary hover:bg-secondary"
-                    text={"Download Csv"}
-                    icon={<FiDownload />}
+                  <CsvDownloader
+                    filename="earning-booking"
+                    extension=".csv"
+                    columns={headers}
+                    datas={downloadData}
+                    text="DOWNLOAD CSV"
+                    className="bg-primary px-4 py-1 rounded-md text-[12px] font-semibold"
                   />
+                 
                 </div>
               </div>
             </div>
             <div className="border-primary border">
               <DefaultTable
-                isLoading={false}
-                headings={userHeading}
-                data={userData?.spaceOwners}
+                isLoading={bookingLoading}
+                headings={earningHeadings}
+                data={bookingData || []}
                 disablePagination={false}
                 size={size}
                 setSize={setSize}

@@ -11,6 +11,7 @@ const CommonSelect = ({
   border,
   width,
   disabled,
+  defaultValue
   
 }) => {
   
@@ -41,6 +42,7 @@ const CommonSelect = ({
           labelId={labelId}
           id={id}
           value={value}
+          defaultValue={defaultValue}
           onChange={handleChange}
           label={label}
           disabled={disabled}

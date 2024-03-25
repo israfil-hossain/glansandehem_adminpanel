@@ -10,6 +10,8 @@ export const API ={
     ResetPasswordRequest:'/api/Authentication/ResetPasswordRequest', // post 
     ResetPassword:'/api/Authentication/ResetPassword', // post 
 
+    //Coupon
+    VerifyCoupon: "/api/CleaningCoupon/VerifyByCode", // post
 
 
 
@@ -28,18 +30,20 @@ export const API ={
     GetCleaningSubscription: '/api/CleaningSubscription/GetUserSubscription', //get
     GetAllSubscriptionType : '/api/CleaningSubscription/GetAllSubscriptionTypes', //get 
     GetAllSubscription: '/api/CleaningSubscription/GetAll', //get 
-    CancelSubscription:'/api/CleaningSubscription/CancelSubscription', //patch
+    CancelSubscription:'/api/CleaningSubscription/CancelSubscriptionById', //patch
     GetSubscriptionByID: '/api/CleaningSubscription/GetById', // get by id
+    UpdateCleaningSUbscription: '/api/CleaningSubscription/UpdateSubscriptionById/', // patch 
 
     // Cleaning Prices 
     PostCleaningPrice: "/api/CleaningPrice/Create", // post 
+    UpdateCleaningPrice: "/api/CleaningPrice/UpdateById", // post 
     GetAllCleaningPrice: "/api/CleaningPrice/GetAll", // get 
     DropdownCleaningPrice: "/api/CleaningPrice/GetAllSubscriptionFrequenciesForDropdown", //get
 
     // Cleaning Bookings 
     GetCleaningBooks: "/api/CleaningBooking/GetAll", // get 
     UpdateCleaningBooking: "/api/CleaningBooking/UpdateById", //patch
-    
+    GetAllCleaningBooking: "/api/CleaningBooking/GetAllPaidBooking",//get
 
     //Cleaning Time Slots 
     PostCleaningTimeSlot : "/api/CleaningTimeSlot/Create", // post 

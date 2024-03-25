@@ -16,7 +16,7 @@ import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 //Headings ...
 import {
   conditionHeadings,
-  couponHeadings
+  couponHeadings,
 } from "../constants/TableColumns/headings";
 
 //ui imports
@@ -28,7 +28,6 @@ import PriceSetting from "../components/ControlPanel/PriceSetting";
 import Supplies from "../components/ControlPanel/Supplies";
 
 const ControlPanel = () => {
-
   return (
     <Fragment>
       <div className=" ">
@@ -47,24 +46,22 @@ const ControlPanel = () => {
           </Breadcrumbs>
         </PackageBreadcrumb>
         <div className="px-4  ">
-          <div className="grid lg:grid-cols-2 gap-6 xs:grid-cols-1">
-            <div className="space-y-5">
+          <div className="mb-5">
+            {/* Add Coupon */}
+            <Coupon />
+          </div>
+          <div className="grid lg:grid-cols-12 grid-cols-1 gap-6 xs:grid-cols-1">
+            <div className="space-y-5 col-span-8">
               {/* Cleaner Price Settings */}
-              <PriceSetting /> 
-              <Supplies />
-             
+              <PriceSetting />
             </div>
-            <div className="">
-              {/* Add Coupon */}
-              <Coupon />
-
-             
+            <div className="col-span-4">
+              <Supplies />
             </div>
           </div>
         </div>
-         {/* Add New Condition  */}
-         {/*  */}
-        
+        {/* Add New Condition  */}
+        {/*  */}
       </div>
     </Fragment>
   );

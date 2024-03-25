@@ -27,6 +27,7 @@ const DefaultTable = ({
   disablePagination,
   children,
   actionLabel,
+  
   // scrollToTopOnAction,
 }) => {
   const pages = [

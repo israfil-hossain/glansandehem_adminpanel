@@ -12,20 +12,13 @@ import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 
 import DefaultTable from "../components/common/DefaultTable";
 
-import userData from "../constants/Data/dashboardData";
-
-import StoreCard from "../components/common/StoreCard";
-import { earnings, months } from "../constants/Data/constantsData";
 import { topUserHeader } from "../constants/TableColumns/headings";
 import { getCurrentMonth } from "../utils/CommonFunction";
-import { CommonSelect } from "../components/common/ui";
 import { useQuery } from "@tanstack/react-query";
 import { API } from "../api/endpoints";
 
 const Dashboard = () => {
-  const currentMonth = getCurrentMonth();
-  const [earning, setEarnings] = useState("week");
-  const [selectedOption, setSelectedOption] = useState(currentMonth);
+
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10); 
 
@@ -41,7 +34,7 @@ const Dashboard = () => {
     refetch: topUserRefetch,
   } = useQuery([API.GetTopUser]);
 
-  console.log({topUser})
+
 
   return (
     <Fragment>

@@ -22,6 +22,7 @@ import {
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import addCleaningValidationSchema from "../../validations/control_validations/AddCleaningValidation";
 import { useQuery } from "@tanstack/react-query";
+import usePatch from "../../hooks/usePatch";
 
 const style = {
   position: "absolute",
@@ -36,10 +37,9 @@ const style = {
   p: 4,
 };
 const AddCondition = ({ data, refetch, open, onClose }) => {
+ 
   const [status, setStatus] = useState(data ? data?.isActive : true);
-  const [frequency, setFrequency] = useState(
-    data ? data?.subscriptionFrequency : ""
-  );
+  const [frequency, setFrequency] = useState(data?.subscriptionFrequency || "");
 
   // get Cleaning Price Data ....
   const {
@@ -63,10 +63,10 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
   });
 
   // Update Mutation ....
-  const { mutateAsync: updateMutate, isLoading: updateLoading } = useUpdate({
-    endpoint: API.StorageConditionCreate, // Replace with your actual API endpoint
+  const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
+    endpoint: API.UpdateCleaningPrice + `/${data?._id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
-      toast.success("Add Condition Successfully !");
+      toast.success("Update Cleaning Price Successfully !");
       refetch();
       onClose();
     },
@@ -151,6 +151,7 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
                           onClick={() => {
                             onClose();
                             resetForm();
+                            setFrequency("")
                           }}
                         >
                           <AiOutlineCloseCircle
@@ -179,6 +180,7 @@ const AddCondition = ({ data, refetch, open, onClose }) => {
                           options={CleaningPriceDropDown?.data}
                           component={CommonSelect}
                           value={frequency}
+                          defaultValue={data?.subscriptionFrequency}
                           width={387}
                         />
                       </div>

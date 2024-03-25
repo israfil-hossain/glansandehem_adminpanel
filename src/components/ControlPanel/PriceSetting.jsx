@@ -30,15 +30,19 @@ const PriceSetting = () => {
   } = useQuery([API.GetAllCleaningPrice]);
 
 
+  const handleCouponEdit = (items) =>{
+    setCleaningPriceData(items);
+    setOpen(true); 
+  }
    // Coupon Action
-//    const CleaningActions = [
-//     {
-//       icon: <MdModeEditOutline color="white" size={16} />,
-//       tooltip: "Edit",
-//       handler: handleCouponEdit,
-//       bgColor: "bg-blue-500",
-//       hoverColor: "hover:bg-blue-700",
-//     },
+   const CleaningActions = [
+    {
+      icon: <MdModeEditOutline color="white" size={16} />,
+      tooltip: "Edit",
+      handler: handleCouponEdit,
+      bgColor: "bg-blue-500",
+      hoverColor: "hover:bg-blue-700",
+    },
 //     {
 //       icon: <MdDelete color="white" size={16} />,
 //       tooltip: "Delete",
@@ -46,7 +50,7 @@ const PriceSetting = () => {
 //       bgColor: "bg-red-500",
 //       hoverColor: "hover:bg-red-700",
 //     },
-//   ];
+  ];
 
   return (
     <div className="border border-primary rounded-lg p-5 bg-white">
@@ -71,7 +75,7 @@ const PriceSetting = () => {
           setSize={setSize}
           page={page}
           setPage={setPage}
-        //   actionIcons={CleaningActions}
+          actionIcons={CleaningActions}
         />
       </div>
       <AddCondition

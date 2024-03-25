@@ -21,10 +21,15 @@ import { useQuery } from "@tanstack/react-query";
 import GridCard from "../components/common/ui/GridCard";
 import { formatDatewithTime } from "../utils/CommonFunction";
 import usePatch from "../hooks/usePatch";
+import { Progress } from "../components/common/Progress";
+import { CommonProgress } from "../components/common/CommonProgress";
+import AddService from "../components/Service/AddService";
+import EditService from "../components/Service/EditService";
 
 const ServiceTaken = () => {
   const [open, setOpen] = useState(false);
   const [aopen, setAOpen] = useState(false);
+  const [serviceOpen,setServiceOpen] = useState(false); 
   const { id } = useParams();
 
   let url = API.GetSubscriptionByID + `/${id}`;
@@ -33,7 +38,6 @@ const ServiceTaken = () => {
     isLoading: serviceLoading,
     refetch: serviceRefetch,
   } = useQuery([url]);
-
 
   const handleOpen = () => {
     setOpen(true);
@@ -50,11 +54,13 @@ const ServiceTaken = () => {
     setAOpen(false);
   };
 
+
   //Call Booking Update API
   const [isEnabled, setIsEnabled] = useState(false);
 
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
-    endpoint: API.UpdateCleaningBooking + `/${serviceData?.data?.currentBooking?._id}`, // Replace with your actual API endpoint
+    endpoint:
+      API.UpdateCleaningBooking + `/${serviceData?.data?.currentBooking?._id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Booking  Update Successfully !");
       serviceRefetch();
@@ -72,6 +78,17 @@ const ServiceTaken = () => {
     };
     updateMutate(payload); // Call the mutation to update the API
   };
+
+  const handleServiceOpen = ()=>{
+    setServiceOpen(true);
+  }
+  const handleServiceClose = () => {
+    setServiceOpen(false);
+  };
+
+  if (serviceLoading) {
+    return <CommonProgress />;
+  }
   return (
     <Fragment>
       <PackageBreadcrumb>
@@ -130,9 +147,19 @@ const ServiceTaken = () => {
         </div>
 
         <div className="bg-white rounded-lg py-5 px-5 mt-5">
-          <p className="text-lg font-bold text-tertiary ">
-            Subscription Details{" "}
-          </p>
+          <div className="flex justify-between items-center">
+            <p className="text-lg font-bold text-tertiary ">
+              Subscription Details{" "}
+            </p>
+            <div className="p-1">
+              <button
+                className="py-2 bg-[#020a38] text-white rounded-lg px-4 mb-2"
+                onClick={handleServiceOpen}
+              >
+                Edit Details
+              </button>
+            </div>
+          </div>
           <div className="grid lg:grid-cols-2 grid-cols-1 bg-white mt-5 gap-5 ">
             <div>
               <GridCard
@@ -285,7 +312,8 @@ const ServiceTaken = () => {
                       serviceData?.data?.currentBooking?.bookingStatus ===
                       "BookingCancelled"
                         ? "bg-red-300"
-                        : serviceData?.data?.currentBooking?.bookingStatus === "BookingServed"
+                        : serviceData?.data?.currentBooking?.bookingStatus ===
+                          "BookingServed"
                         ? "bg-blue-500"
                         : serviceData?.data?.currentBooking?.bookingStatus ===
                           "BookingCompleted"
@@ -293,34 +321,34 @@ const ServiceTaken = () => {
                         : "bg-primary"
                     } rounded-lg`}
                   >
-                    {
-                      serviceData?.data?.currentBooking?.bookingStatus === "BookingCancelled"
+                    {serviceData?.data?.currentBooking?.bookingStatus ===
+                    "BookingCancelled"
                       ? "Cancelled"
-                      :serviceData?.data?.currentBooking?.bookingStatus ===
-                        "BookingServed" ? "Served"
+                      : serviceData?.data?.currentBooking?.bookingStatus ===
+                        "BookingServed"
+                      ? "Served"
                       : serviceData?.data?.currentBooking?.bookingStatus ===
                         "BookingCompleted"
                       ? "Completed" // Use the intended background color for confirmed bookings
                       : "Processing"}
                   </p>
                 </div>
-                
               </div>
-              {(serviceData?.data?.currentBooking?.bookingStatus ===
-                  "BookingInitiated") && (
-                  <div className="flex space-x-5  w-96 items-center mt-5 py-2 mx-5 px-5 bg-pink-50 rounded-lg">
-                    <p>Confirmed Booking For This User : </p>
-                    <FormGroup>
-                      <FormControlLabel
-                        disabled={false}
-                        control={
-                          <Switch checked={isEnabled} onChange={handleChange} />
-                        }
-                        label="Confirmed"
-                      />
-                    </FormGroup>
-                  </div>
-                )}
+              {serviceData?.data?.currentBooking?.bookingStatus ===
+                "BookingInitiated" && (
+                <div className="flex space-x-5  w-96 items-center mt-5 py-2 mx-5 px-5 bg-pink-50 rounded-lg">
+                  <p>Confirmed Booking For This User : </p>
+                  <FormGroup>
+                    <FormControlLabel
+                      disabled={false}
+                      control={
+                        <Switch checked={isEnabled} onChange={handleChange} />
+                      }
+                      label="Confirmed"
+                    />
+                  </FormGroup>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -337,6 +365,12 @@ const ServiceTaken = () => {
         refetch={serviceRefetch}
         data={serviceData?.data}
       />
+
+      <EditService 
+       open={serviceOpen}
+       onClose={handleServiceClose}
+       refetch={serviceRefetch}
+       data={serviceData?.data}/>
     </Fragment>
   );
 };

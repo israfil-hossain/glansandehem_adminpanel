@@ -44,6 +44,7 @@ const Service = () => {
   const [size, setSize] = useState(10);
   const [emailSearch, setEmailSearch] = useState("");
   const [Frequency, setFrequency] = React.useState(null);
+  const [id,setId] = useState("")
 
 
   const [open, setOpen] = useState(false);
@@ -81,7 +82,7 @@ const Service = () => {
   };
 
   const { mutateAsync: cancelMutate, isLoading: cancelLoading } = usePatch({
-    endpoint: API.CancelSubscription, // Replace with your actual API endpoint
+    endpoint: API.CancelSubscription+`/${id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Subscription Cancel SuccessFully !");
       serviceRefetch();
@@ -96,10 +97,8 @@ const Service = () => {
     if (items?._id) {
       cancelConfirmation().then((result) => {
         if (result.isConfirmed) {
-          const payload = {
-            subscriptionId: items?._id
-          }
-          cancelMutate(payload);
+          setId(items?._id);
+          cancelMutate();
         }
       });
     }
@@ -172,7 +171,7 @@ const Service = () => {
                 <DefaultTable
                   isLoading={allServiceLoading}
                   headings={userHeading}
-                  data={allService?.data || []}
+                  data={allService || []}
                   disablePagination={false}
                   size={size}
                   setSize={setSize}
