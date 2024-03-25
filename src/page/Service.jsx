@@ -37,6 +37,7 @@ import usePatch from "../hooks/usePatch";
 import { cancelConfirmation } from "../components/common/Toast/DeleteConfirmation";
 
 import { toast } from "react-toastify";
+import { useDelete } from "../hooks";
 
 
 const Service = () => {
@@ -81,8 +82,8 @@ const Service = () => {
     navigate(`/service-taken/${items?._id}`);
   };
 
-  const { mutateAsync: cancelMutate, isLoading: cancelLoading } = usePatch({
-    endpoint: API.CancelSubscription+`/${id}`, // Replace with your actual API endpoint
+  const { mutateAsync: cancelMutate, isLoading: cancelLoading } = useDelete({
+    endpoint: API.CancelSubscription , // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Subscription Cancel SuccessFully !");
       serviceRefetch();
@@ -92,13 +93,22 @@ const Service = () => {
       toast.error("Something went wrong !");
     },
   });
+  const deleteEntry = useDelete({
+    endpoint: API.CancelSubscription, // Define the endpoint to delete from
+    onSuccess: () => {
+        toast.success("Subscription Cancel SuccessFully !");
+        serviceRefetch();
+    },
+    onError: (error) => {
+      // Handle errors (e.g., display an error message)
+    },
+  });
 
   const handleDelete = (items) => {
     if (items?._id) {
       cancelConfirmation().then((result) => {
         if (result.isConfirmed) {
-          setId(items?._id);
-          cancelMutate();
+          deleteEntry.mutateAsync(items?._id);
         }
       });
     }
