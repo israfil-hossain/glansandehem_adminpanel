@@ -172,8 +172,8 @@ const ServiceTaken = () => {
               />
               <div className="flex space-x-2 items-center ">
                 <GridCard
-                  title={"Date and Time "}
-                  value={formatDatewithTime(serviceData?.data?.startDate)}
+                  title={"Cleaning Date and Time "}
+                  value={formatDatewithTime(serviceData?.data?.currentBooking?.cleaningDate)}
                 />
                 <div
                   className="cursor-pointer  flex space-x-3 text-center items-center rounded-md border w-24 h-10 px-3 py-1 shadow-sm bg-gray-50 hover:bg-indigo-50"
@@ -354,7 +354,7 @@ const ServiceTaken = () => {
         </div>
       </div>
       <div className="px-10 py-5 bg-white mt-8">
-        <EarningsTable id={ serviceData?.data?.currentBooking?.bookingUser}/>
+        <EarningsTable id={ serviceData?.data?.subscribedUser?._id} />
       </div>
       <AddTime
         open={open}
