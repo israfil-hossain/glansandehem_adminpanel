@@ -25,11 +25,12 @@ import { Progress } from "../components/common/Progress";
 import { CommonProgress } from "../components/common/CommonProgress";
 import AddService from "../components/Service/AddService";
 import EditService from "../components/Service/EditService";
+import EarningsTable from "../components/Service/EarningsTable";
 
 const ServiceTaken = () => {
   const [open, setOpen] = useState(false);
   const [aopen, setAOpen] = useState(false);
-  const [serviceOpen,setServiceOpen] = useState(false); 
+  const [serviceOpen, setServiceOpen] = useState(false);
   const { id } = useParams();
 
   let url = API.GetSubscriptionByID + `/${id}`;
@@ -53,7 +54,6 @@ const ServiceTaken = () => {
   const handleAdditionClose = () => {
     setAOpen(false);
   };
-
 
   //Call Booking Update API
   const [isEnabled, setIsEnabled] = useState(false);
@@ -79,9 +79,9 @@ const ServiceTaken = () => {
     updateMutate(payload); // Call the mutation to update the API
   };
 
-  const handleServiceOpen = ()=>{
+  const handleServiceOpen = () => {
     setServiceOpen(true);
-  }
+  };
   const handleServiceClose = () => {
     setServiceOpen(false);
   };
@@ -353,6 +353,9 @@ const ServiceTaken = () => {
           </div>
         </div>
       </div>
+      <div className="px-10 py-5 bg-white mt-8">
+        <EarningsTable id={ serviceData?.data?.currentBooking?.bookingUser}/>
+      </div>
       <AddTime
         open={open}
         onClose={handleClose}
@@ -366,11 +369,12 @@ const ServiceTaken = () => {
         data={serviceData?.data}
       />
 
-      <EditService 
-       open={serviceOpen}
-       onClose={handleServiceClose}
-       refetch={serviceRefetch}
-       data={serviceData?.data}/>
+      <EditService
+        open={serviceOpen}
+        onClose={handleServiceClose}
+        refetch={serviceRefetch}
+        data={serviceData?.data}
+      />
     </Fragment>
   );
 };

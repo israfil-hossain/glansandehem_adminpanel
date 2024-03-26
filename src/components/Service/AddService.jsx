@@ -41,9 +41,9 @@ const style = {
 };
 const AddService = ({ data, refetch, open, onClose }) => {
   const [coupon, setCoupon] = useState("");
-  const [couponCodeValue,setCouponCode] = useState(null); 
+  const [couponCodeValue, setCouponCode] = useState(null);
 
- // get subscription Frequency data...
+  // get subscription Frequency data...
   const {
     data: subscriptionFrequency = {},
     isLoading: cleaningFrequencyLoading,
@@ -56,6 +56,8 @@ const AddService = ({ data, refetch, open, onClose }) => {
       toast.success("Add Service Successfully !");
       refetch();
       onClose();
+      setCoupon(""); 
+      seetCouponCode(null); 
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
@@ -85,7 +87,7 @@ const AddService = ({ data, refetch, open, onClose }) => {
 
     onSuccess: async (data) => {
       toast.success("Coupon is Verifyed !");
-      setCouponCode(data?.data?.data?._id)
+      setCouponCode(data?.data?.data?._id);
     },
     onError: (error) => {
       toast.error("Coupon is UnVerified !");
@@ -105,8 +107,7 @@ const AddService = ({ data, refetch, open, onClose }) => {
       let payload = {
         ...values,
         areaInSquareMeters: Number(values?.areaInSquareMeters),
-        cleaningCoupon: couponCodeValue
-
+        cleaningCoupon: couponCodeValue,
       };
 
       if (data?._id) {
@@ -327,7 +328,6 @@ const AddService = ({ data, refetch, open, onClose }) => {
                               "cleaningDurationInHours",
                               Duration(newValue)
                             );
-                            
                           }}
                           value={values.areaInSquareMeters}
                           error={
@@ -349,7 +349,6 @@ const AddService = ({ data, refetch, open, onClose }) => {
                         />
                       </div>
 
-                     
                       {/* Cleaning Duration  */}
                       <div className="mb-6">
                         <label
@@ -498,7 +497,16 @@ const AddService = ({ data, refetch, open, onClose }) => {
                                       }`}
                                       htmlFor={item.subscriptionFrequency}
                                     >
-                                      {item.subscriptionFrequency}
+                                      {item.subscriptionFrequency ===
+                                      "EveryTwoWeeks"
+                                        ? " Every Two Weeks"
+                                        : item.subscriptionFrequency ===
+                                          "EveryWeek"
+                                        ? "Every Week"
+                                        : item.subscriptionFrequency ===
+                                          "EveryFourWeeks"
+                                        ? "Every Four Weeks"
+                                        : "One Time Only"}
                                     </p>
                                     <span className="text-sm">
                                       {item.subscriptionPrice * 2} kr/h{" "}
@@ -585,6 +593,25 @@ const AddService = ({ data, refetch, open, onClose }) => {
                             checked={values.hasOtherPets}
                             onChange={handleChange}
                           />
+                        </div>
+                      </div>
+
+                      <div className="mt-6 flex items-center space-x-2">
+                        <input
+                          className="flex-1 border py-2 px-4 rounded-lg "
+                          placeholder={"Gift Coupon"}
+                          onChange={(e) => setCoupon(e.target.value)}
+                        />
+                        <div
+                          className="shrink-0 flex py-2 border px-3 rounded-lg bg-black text-white justify-center items-center "
+                          onClick={handleCoupon}
+                        >
+                          {couponLoading && (
+                            <div className="pr-2">
+                              <Progress />
+                            </div>
+                          )}
+                          Apply
                         </div>
                       </div>
                     </div>
