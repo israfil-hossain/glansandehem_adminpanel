@@ -128,7 +128,7 @@ const ServiceTaken = () => {
             <div>
               <GridCard
                 title={"Service Register Date"}
-                value={serviceData?.data?.subscribedUser?.dateJoined}
+                value={formatDatewithTime(serviceData?.data?.subscribedUser?.dateJoined)}
               />
               <GridCard
                 title={"Address"}

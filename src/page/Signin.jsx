@@ -82,7 +82,7 @@ const Signin = () => {
               className="items-center mt-5"
             />
             <p className="text-white leading-12 mt-5 text-3xl items-center text-center">
-              Welcome to GlansandeHem
+              Welcome to Glänsande Hem
             </p>
           </div>
         </div>
