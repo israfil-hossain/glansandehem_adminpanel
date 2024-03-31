@@ -88,7 +88,7 @@ const AddTime = ({ data, refetch, open, onClose }) => {
             <div>
               <Formik
                 initialValues={{
-                  cleaningDate: dayjs(data?.startDate).format(
+                  cleaningDate: dayjs( data?.currentBooking?.cleaningDate).format(
                     "YYYY-MM-DDTHH:mm"
                   ),
                 }}
