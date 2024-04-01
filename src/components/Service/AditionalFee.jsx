@@ -39,7 +39,7 @@ const style = {
 const AdditionalFee = ({ data, refetch, open, onClose }) => {
   // Update Mutation ....
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
-    endpoint: API.UpdateCleaningBooking + `/${data?.currentBooking?._id}`, // Replace with your actual API endpoint
+    endpoint: API.UpdateBooking + `/${data?.subscribedUser?._id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Additional Fee Update Successfully !");
       refetch();

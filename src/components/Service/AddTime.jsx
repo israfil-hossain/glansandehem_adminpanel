@@ -39,10 +39,10 @@ const style = {
   p: 4,
 };
 const AddTime = ({ data, refetch, open, onClose }) => {
-  
+  console.log({data})
   // Update Mutation ....
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
-    endpoint: API.UpdateCleaningBooking + `/${data?.currentBooking?._id}`, // Replace with your actual API endpoint
+    endpoint: API.UpdateBooking + `/${data?.subscribedUser?._id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Time Update Successfully !");
       refetch();

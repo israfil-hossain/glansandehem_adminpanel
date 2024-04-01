@@ -60,9 +60,9 @@ const ServiceTaken = () => {
 
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
     endpoint:
-      API.UpdateCleaningBooking + `/${serviceData?.data?.currentBooking?._id}`, // Replace with your actual API endpoint
+      API.MarkedServe + `/${serviceData?.data?.currentBooking?._id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
-      toast.success("Booking  Update Successfully !");
+      toast.success("Booking  Confirmed Successfully !");
       serviceRefetch();
     },
     onError: (error) => {
