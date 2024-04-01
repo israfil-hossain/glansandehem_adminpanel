@@ -43,7 +43,7 @@ export const API ={
     // Cleaning Bookings 
     GetCleaningBooks: "/api/CleaningBooking/GetAll", // get 
     UpdateCleaningBooking: "/api/CleaningBooking/UpdateById", //patch
-    UpdateBooking: "/api/CleaningSubscription/UpdateSubscriptionBookingById/",//patch
+    UpdateBooking: "/api/CleaningSubscription/UpdateSubscriptionBookingById",//patch
     GetAllCleaningBooking: "/api/CleaningBooking/GetAllPaidBooking",//get
     MarkedServe: "/api/CleaningBooking/MarkBookingAsServedById", 
 

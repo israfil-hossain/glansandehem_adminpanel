@@ -39,7 +39,7 @@ const style = {
   p: 4,
 };
 const AddTime = ({ data, refetch, open, onClose }) => {
-  console.log({data})
+  // console.log({data})
   // Update Mutation ....
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
     endpoint: API.UpdateBooking + `/${data?._id}`, // Replace with your actual API endpoint
