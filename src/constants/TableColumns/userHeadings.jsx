@@ -141,7 +141,22 @@ const userHeading = [
           alt="calender"
           style={{ width: 20, height: 20, borderRadius: "50%" }}
         />
-        <p>{formatDateString(item?.startDate)}</p>
+        <p>{formatDateString(item?.currentBooking?.cleaningDate)}</p>
+      </div>
+    ),
+  },
+  {
+    label: "Next Schedule Date",
+    key: "dateJoined",
+    className: "custom-class",
+    render: (value, item) => (
+      <div className="flex space-x-2 w-28">
+        <img
+          src={calender}
+          alt="calender"
+          style={{ width: 20, height: 20, borderRadius: "50%" }}
+        />
+        <p>{formatDateString(item?.nextScheduleDate)}</p>
       </div>
     ),
   },
