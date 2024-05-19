@@ -44,7 +44,7 @@ const userHeading = [
     key: "email",
     className: "custom-class",
     render: (value, item) => (
-      <div className="flex space-x-2 items-center w-44 overflow-hidden">
+      <div className="flex space-x-2 items-center w-auto overflow-hidden">
         <CiMail className="" size={14} />
         <p className="overflow-x-auto w-full">{item?.subscribedUser?.email}</p>
       </div>

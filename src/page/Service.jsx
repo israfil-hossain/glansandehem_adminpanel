@@ -60,12 +60,17 @@ const Service = () => {
     ScheduleToDate: null,
   });
 
+
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
   const constructUrl = () => {
     let url = `${API.GetAllSubscription}?Page=${page}&PageSize=${size}`;
+
+    if(Frequency){
+      url += `&Frequency=${Frequency}`;
+    }
 
     if (filter.OnlyInactive) {
       url += `&OnlyInactive=${filter.OnlyInactive}`;
