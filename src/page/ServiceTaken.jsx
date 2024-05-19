@@ -19,13 +19,19 @@ import { API } from "../api/endpoints";
 //query
 import { useQuery } from "@tanstack/react-query";
 import GridCard from "../components/common/ui/GridCard";
-import { formatDatewithTime } from "../utils/CommonFunction";
+import {
+  formatDateString,
+  formatDatewithTime,
+  formatTime,
+} from "../utils/CommonFunction";
 import usePatch from "../hooks/usePatch";
 import { Progress } from "../components/common/Progress";
 import { CommonProgress } from "../components/common/CommonProgress";
 import AddService from "../components/Service/AddService";
 import EditService from "../components/Service/EditService";
 import EarningsTable from "../components/Service/EarningsTable";
+import dayjs from "dayjs";
+import { cancelConfirmation } from "../components/common/Toast/DeleteConfirmation";
 
 const ServiceTaken = () => {
   const [open, setOpen] = useState(false);
@@ -39,6 +45,8 @@ const ServiceTaken = () => {
     isLoading: serviceLoading,
     refetch: serviceRefetch,
   } = useQuery([url]);
+
+  console.log("Service Data : ", serviceData)
 
   const handleOpen = () => {
     setOpen(true);
@@ -59,8 +67,7 @@ const ServiceTaken = () => {
   const [isEnabled, setIsEnabled] = useState(false);
 
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
-    endpoint:
-      API.MarkedServe + `/${serviceData?.data?.currentBooking?._id}`, // Replace with your actual API endpoint
+    endpoint: API.MarkedServe + `/${serviceData?.data?.currentBooking?._id}`, // Replace with your actual API endpoint
     onSuccess: (data) => {
       toast.success("Booking  Confirmed Successfully !");
       serviceRefetch();
@@ -86,9 +93,29 @@ const ServiceTaken = () => {
     setServiceOpen(false);
   };
 
-  if (serviceLoading) {
-    return <CommonProgress />;
-  }
+  // Update Mutation ....
+  const { mutateAsync: CancelServiceMutation, isLoading: cancelLoading } = usePatch({
+    endpoint:
+      API.SkippedUpcomingSubscription + `${serviceData?.data?._id}`, // Replace with your actual API endpoint
+    onSuccess: (data) => {
+      toast.success("Cancel Next Schedule Successfully !");
+      serviceRefetch();
+    },
+    onError: (error) => {
+      // Handle update error, e.g., display an error message
+      toast.error(error?.response?.data?.message);
+    },
+  });
+
+  const handleCancel = async () => {
+    if (serviceData?.data?.nextScheduleDate) {
+      await cancelConfirmation().then((result) => {
+        if (result.isConfirmed) {
+          CancelServiceMutation();
+        }
+      });
+    }
+  };
   return (
     <Fragment>
       <PackageBreadcrumb>
@@ -104,6 +131,9 @@ const ServiceTaken = () => {
           </Link>
         </Breadcrumbs>
       </PackageBreadcrumb>
+      {
+        serviceLoading && <CommonProgress />
+      }
 
       <div className="mt-0">
         <div className="bg-white rounded-lg py-5 px-5">
@@ -128,7 +158,9 @@ const ServiceTaken = () => {
             <div>
               <GridCard
                 title={"Service Register Date"}
-                value={formatDatewithTime(serviceData?.data?.subscribedUser?.dateJoined)}
+                value={formatDatewithTime(
+                  serviceData?.data?.subscribedUser?.dateJoined
+                )}
               />
               <GridCard
                 title={"Address"}
@@ -170,11 +202,35 @@ const ServiceTaken = () => {
                 title={"Cleaning Duration "}
                 value={serviceData?.data?.cleaningDurationInHours + " Hours"}
               />
-              <div className="flex space-x-2 items-center ">
-                <GridCard
-                  title={"Cleaning Date and Time "}
-                  value={formatDatewithTime(serviceData?.data?.currentBooking?.cleaningDate)}
-                />
+              <div className="flex space-x-2 items-center justify-between mb-4">
+                <div className="w-96 flex-col space-y-4 ">
+                  <GridCard
+                    title={"Cleaning Date"}
+                    value={formatDateString(
+                      serviceData?.data?.currentBooking?.cleaningDate
+                    )}
+                  />
+                  <div className="bg-[#EFF6FF] w-96 px-5 ml-2 flex gap-5 py-2 ">
+                    <h2 className=" font-semibold text-[14px]">
+                      Cleaning Time :
+                    </h2>
+                    <h2 className=" font-normal text-[16px]">
+                      {formatTime(
+                        dayjs(serviceData?.data?.currentBooking?.cleaningDate)
+                      )}{" "}
+                      {" - "}
+                      {formatTime(
+                        dayjs(
+                          serviceData?.data?.currentBooking?.cleaningDate
+                        ).add(
+                          serviceData?.data?.cleaningDurationInHours,
+                          "hour"
+                        )
+                      )}
+                    </h2>
+                  </div>
+                </div>
+
                 <div
                   className="cursor-pointer  flex space-x-3 text-center items-center rounded-md border w-24 h-10 px-3 py-1 shadow-sm bg-gray-50 hover:bg-indigo-50"
                   onClick={handleOpen}
@@ -351,10 +407,32 @@ const ServiceTaken = () => {
               )}
             </div>
           </div>
+
+          {serviceData?.data?.nextScheduleDate && (
+            <div className="rouded-xl flex  justify-center px-4 py-4 text-center  flex-col">
+              <div className="bg-indigo-100  text-black py-2 my-2 px-4 lg:flex justify-between ">
+                <p>Next Schedule :</p>
+                <p>
+                  {formatDateString(
+                    serviceData?.data?.nextScheduleDate
+                  ) || "N/A"}
+                </p>
+              </div>
+              <div className="flex lg:flex-row flex-col space-y-2  bg-indigo-100 px-2 py-2 items-center justify-between space-x-2 font-semibold">
+                <h2 className="text-[14px] ">Do you want to Cancel the next Service For this User ?</h2>
+                <button
+                  className="w-16 h-8 bg-black text-white text-[12px] rounded-lg"
+                  onClick={handleCancel}
+                >
+                  Yes
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="px-10 py-5 bg-white mt-8">
-        <EarningsTable id={ serviceData?.data?.subscribedUser?._id} />
+        <EarningsTable id={serviceData?.data?.subscribedUser?._id} />
       </div>
       <AddTime
         open={open}

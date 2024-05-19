@@ -1,10 +1,8 @@
 import { CiMail, CiPhone } from "react-icons/ci";
 import { calender, profile } from "../../assets/images/icons";
 import {
-  convertToTitleCase,
   formatDateString,
 } from "../../utils/CommonFunction";
-import { FaUser } from "react-icons/fa";
 
 const earningHeadings = [
   {
@@ -17,17 +15,37 @@ const earningHeadings = [
     ),
   },
   
-//   {
-//     label: "PHONE",
-//     key: "phoneNumber",
-//     className: "custom-class",
-//     render: (value, item) => (
-//       <div className="flex space-x-2  items-center w-28">
-//         <CiPhone className="" size={15} />
-//         <p>{item?.subscribedUser?.phoneNumber}</p>
-//       </div>
-//     ),
-//   },
+  {
+    label: "PHONE",
+    key: "phoneNumber",
+    className: "custom-class",
+    render: (value, item) => (
+      <div className="flex space-x-2  items-center w-28">
+        <CiPhone className="" size={15} />
+        <p>{item?.bookingUser?.phoneNumber}</p>
+      </div>
+    ),
+  },
+  {
+    label: "Address",
+    key: "address",
+    className: "custom-class",
+    render: (value, item) => (
+      <div className="flex space-x-2  items-center w-28">
+        <p>{item?.bookingUser?.address}</p>
+      </div>
+    ),
+  },
+  {
+    label: "PID",
+    key: "pidNumber",
+    className: "custom-class",
+    render: (value, item) => (
+      <div className="flex space-x-2  items-center w-28">
+        <p>{item?.bookingUser?.pidNumber}</p>
+      </div>
+    ),
+  },
   {
     label: "EMAIL",
     key: "email",
@@ -115,7 +133,7 @@ const earningHeadings = [
     key: "cleaningDate",
     className: "custom-class",
     render: (value, item) => (
-      <div className="flex space-x-2 w-28">
+      <div className="flex space-x-2 w-36">
         <img
           src={calender}
           alt="calender"

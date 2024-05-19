@@ -23,6 +23,10 @@ const formatDateString = (date) => {
   return !!date ? dayjs(date).format("DD MMM, YYYY") : "";
 };
 
+const formatTime = (date) => {
+  return !!date ? dayjs(date).format("HH:mm") : "";
+};
+
 export const formatDatewithTime = (date) => {
   return !!date ? dayjs(date).format("DD MMM, YYYY HH:mm:ss") : "";
 }
@@ -67,4 +71,16 @@ export const Duration = (size) => {
 };
 
 
-export { formatDateString, getCurrentMonth, isLargeScreen };
+
+
+function getDayName(dateString) {
+  // Parse the date string using day.js
+  const dateObject = dayjs(dateString);
+
+  // Get the day name using the locale-aware format
+  const dayName = dateObject.format('dddd');
+
+  return dayName;
+}
+
+export { getDayName,formatTime,formatDateString, getCurrentMonth, isLargeScreen };

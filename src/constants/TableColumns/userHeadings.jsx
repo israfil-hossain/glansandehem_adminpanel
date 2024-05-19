@@ -9,7 +9,7 @@ import { FaUser } from "react-icons/fa";
 const userHeading = [
   {
     label: "NAME",
-    key: "x",
+    key: "name",
     render: (value, item) => (
       <div className="flex space-x-2 xs:w-40  items-center">
         {item?.subscribedUser?.profilePicture ? (
@@ -28,39 +28,6 @@ const userHeading = [
       </div>
     ),
   },
-  //   <p className={`px-3 py-1 ${value === "pending" ? "bg-[#dde1028a]" : "bg-[#a5f9a9a2]"}  rounded-lg `}>
-  //   {value}
-  // </p>
-  // {
-  //   label: "CleaningDuration",
-  //   key: "x",
-  //   className: "custom-class",
-  //   render: (value, item) => (
-  //     <div className="text-sm font-normal w-16">
-  //      <p className="items-center text-center">{item?.cleaningDurationInHours} h</p>
-  //     </div>
-  //   ),
-  // },
-  // {
-  //   label: "AreaSquare",
-  //   key: "x",
-  //   className: "custom-class",
-  //   render: (value, item) => (
-  //     <div className="text-sm font-normal w-12">
-  //       <p>{item?.areaInSquareMeters} m<sup>2</sup></p>
-  //     </div>
-  //   ),
-  // },
-  // {
-  //   label: "PostalCode",
-  //   key: "x",
-  //   className: "custom-class",
-  //   render: (value, item) => (
-  //     <div className="text-sm font-normal">
-  //       <p>{item?.postalCode}</p>
-  //     </div>
-  //   ),
-  // },
   {
     label: "PHONE",
     key: "phoneNumber",
@@ -147,7 +114,7 @@ const userHeading = [
   },
   {
     label: "Next Schedule Date",
-    key: "dateJoined",
+    key: "nextSchedule",
     className: "custom-class",
     render: (value, item) => (
       <div className="flex space-x-2 w-28">

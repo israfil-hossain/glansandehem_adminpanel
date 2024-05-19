@@ -33,6 +33,7 @@ export const API ={
     CancelSubscription:'/api/CleaningSubscription/CancelSubscriptionById', //patch
     GetSubscriptionByID: '/api/CleaningSubscription/GetById', // get by id
     UpdateCleaningSUbscription: '/api/CleaningSubscription/UpdateSubscriptionById/', // patch 
+    SkippedUpcomingSubscription : '/api/CleaningSubscription/SkipUpcomingSubscriptionBookingById/', //patch
 
     // Cleaning Prices 
     PostCleaningPrice: "/api/CleaningPrice/Create", // post 
@@ -67,6 +68,8 @@ export const API ={
 
     //Dashboard 
     Dashboard : "api/Dashboard/GetCardStats", // get 
-    GetTopUser: "/api/CleaningBooking/GetTopBookingUsers"
+    GetTopUser: "/api/CleaningBooking/GetTopBookingUsers", 
+    GetUpcomingWeek: "/api/Dashboard/GetBookingForUpcomingWeek", 
+    GetLatestPayment: "/api/Dashboard/GetLatestBookingPayments"
 
 }

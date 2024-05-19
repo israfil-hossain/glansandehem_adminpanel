@@ -12,7 +12,7 @@ import PackageBreadcrumb from "../components/common/PackageBreadcrumb";
 
 import DefaultTable from "../components/common/DefaultTable";
 
-import { topUserHeader } from "../constants/TableColumns/headings";
+import {  paymentHeadings, upcomingHeading } from "../constants/TableColumns/headings";
 import { getCurrentMonth } from "../utils/CommonFunction";
 import { useQuery } from "@tanstack/react-query";
 import { API } from "../api/endpoints";
@@ -28,11 +28,19 @@ const Dashboard = () => {
     refetch: dashboardRefetch,
   } = useQuery([API.Dashboard]);
 
+
+
   const {
-    data: topUser = {},
-    isLoading: topUserLoading,
-    refetch: topUserRefetch,
-  } = useQuery([API.GetTopUser]);
+    data: upcomingData = {},
+    isLoading: upcomingLoading,
+    refetch: upcomingRefetch,
+  } = useQuery([API.GetUpcomingWeek]);
+
+  const {
+    data: latestPaymentData = {},
+    isLoading: paymentLoading,
+    refetch: PaymentRefetch,
+  } = useQuery([API.GetLatestPayment]);
 
 
 
@@ -60,7 +68,7 @@ const Dashboard = () => {
             </div>
             <div className="flex flex-col ">
               <h2 className="text-xl font-bold font-sans">{dashboardData?.data?.totalSubscriptions}</h2>
-              <p className="text-sm text-gray-300">Total Subscribed Users</p>
+              <p className="text-sm text-gray-300">Total Subscription</p>
             </div>
           </div>
           <div className="p-4 flex border border-[#4fd0d9] rounded-xl space-x-4 bg-white">
@@ -87,49 +95,44 @@ const Dashboard = () => {
             </div>
             <div className="flex flex-col ">
               <h2 className="text-xl font-bold font-sans">{dashboardData?.data?.totalActiveBookings}</h2>
-              <p className="text-sm text-gray-300">Active Booking</p>
+              <p className="text-sm text-gray-300">Active Subscription</p>
             </div>
           </div>
         </div>
 
         <div className="w-full gap-8">
-          {/* <div className="lg:col-span-8 col-span-12 border border-primary  p-5 rounded-lg "> */}
-            {/* <div className="flex justify-between">
-              <p className="text-[16px] font-bold font-sans">Earnings</p>
-              <Box sx={{ minWidth: 120 }}>
-                <CommonSelect
-                  labelId={"earning-label"}
-                  id={"earning-label-id"}
-                  options={earnings}
-                  value={earning}
-                  setSelect={setEarnings}
-                />
-              </Box>
-            </div>
-            <div className="h-full">
-              <IncomeAreaChart slot={earning} height={340} />
-            </div> */}
-          {/* </div> */}
           <div className="lg:col-span-6 col-span-12">
             <div className="flex justify-between space-x-5 bg-white border-secondary  border border-b-0 rounded-t-lg p-2">
               <div className="p-1 text-lg font-semibold font-sanse">
-                Top Users
-              </div>
-              <div className="p-1">
-                {/* <CommonSelect
-                  labelId={"months-select"}
-                  id={"months-select-id"}
-                  options={months}
-                  value={selectedOption}
-                  setSelect={setSelectedOption}
-                /> */}
+                Upcomming Booking List 
               </div>
             </div>
             <div className="min-h-80  border border-secondary">
               <DefaultTable
-                isLoading={topUserLoading}
-                headings={topUserHeader}
-                data={topUser?.data}
+                isLoading={upcomingLoading}
+                headings={upcomingHeading}
+                data={upcomingData?.data}
+                disablePagination={true}
+                size={size}
+                setSize={setSize}
+                page={page}
+                setPage={setPage}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="w-full gap-8 mt-5">
+          <div className="lg:col-span-6 col-span-12">
+            <div className="flex justify-between space-x-5 bg-white border-secondary  border border-b-0 rounded-t-lg p-2">
+              <div className="p-1 text-lg font-semibold font-sanse">
+                Recent payment Records 
+              </div>
+            </div>
+            <div className="min-h-80  border border-secondary">
+              <DefaultTable
+                isLoading={paymentLoading}
+                headings={paymentHeadings}
+                data={latestPaymentData?.data}
                 disablePagination={true}
                 size={size}
                 setSize={setSize}

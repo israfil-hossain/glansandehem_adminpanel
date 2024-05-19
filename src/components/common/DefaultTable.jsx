@@ -1,3 +1,4 @@
+import React, { Fragment } from "react";
 import {
   Paper,
   Skeleton,
@@ -7,10 +8,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
 } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
-import React, { Fragment } from "react";
-
 import CommonTooltip from "./CommonTooltip";
 import { CommonSelect } from "./ui";
 import { nodata } from "../../assets";
@@ -27,8 +27,7 @@ const DefaultTable = ({
   disablePagination,
   children,
   actionLabel,
-  
-  // scrollToTopOnAction,
+  handleSort
 }) => {
   const pages = [
     { label: "10", value: 10 },
@@ -36,7 +35,7 @@ const DefaultTable = ({
     { label: "50", value: 50 },
     { label: "100", value: 100 },
   ];
- 
+
 
   return (
     <Fragment>
@@ -62,7 +61,16 @@ const DefaultTable = ({
                   className={heading?.className}
                   style={heading?.style}
                 >
-                  {heading?.label}
+                  {heading.key === 'nextSchedule' ? (
+                    <TableSortLabel
+                     
+                      onClick={() => handleSort()}
+                    >
+                      {heading?.label}
+                    </TableSortLabel>
+                  ) : (
+                    heading?.label
+                  )}
                 </TableCell>
               ))}
               {actionIcons && (
@@ -119,7 +127,6 @@ const DefaultTable = ({
                                 key={index}
                                 onClick={() => {
                                   action.handler(item);
-                                  // scrollToTopOnAction();
                                 }}
                                 className={`p-1 rounded-md shadow-lg hover:shadow-xl hover:shadow-gray-400 ${action.bgColor} 
                                ${action.hoverColor}`}
