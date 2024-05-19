@@ -143,6 +143,21 @@ const earningHeadings = [
       </div>
     ),
   },
+  {
+    label: "Payment Date",
+    key: "x",
+    className: "custom-class",
+    render: (value, item) => (
+      <div className="flex space-x-2 w-36">
+        <img
+          src={calender}
+          alt="calender"
+          style={{ width: 20, height: 20, borderRadius: "50%" }}
+        />
+        <p>{formatDateString(item?.paymentReceive?.paymentDate)}</p>
+      </div>
+    ),
+  },
 ];
 
 export { earningHeadings };
