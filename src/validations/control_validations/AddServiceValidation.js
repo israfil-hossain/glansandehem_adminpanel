@@ -1,5 +1,6 @@
 import { object, string, number } from "yup";
 import * as Yup from 'yup';
+import postalCodeData from "../../constants/Data/postalCode";
 
 const addServiceValidation = object({
     userFullName: string()
@@ -14,6 +15,15 @@ const addServiceValidation = object({
     startDate: Yup.date()
     .min(new Date(), "Start date cannot be before the current date")
     .required("Start date is required"),
+    postalCode: Yup
+    .string()
+    .required('Postal Code is required')
+    .test(
+      'isValidPostalCode',
+      'Invalid postal code',
+      (value) =>
+        postalCodeData.some((data) => data.value === value.toUpperCase()) // Case-insensitive comparison
+    ),
 
 
 });

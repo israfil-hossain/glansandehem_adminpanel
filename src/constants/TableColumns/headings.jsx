@@ -70,7 +70,7 @@ const upcomingHeading = [
     className: "custom-class",
     render: (value, item) => (
       <div className="flex flex-col space-x-2 items-center w-32 overflow-hidden bg-purple-300 text-center rounded-lg py-1">
-        <p className="overflow-x-auto w-full">{formatDateString(value)}</p>
+        <p className="overflow-x-auto w-full">{formatDateString(item?.currentBooking?.cleaningDate)}</p>
         <p>{getDayName(value)}</p>
       </div>
     ),

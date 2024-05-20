@@ -23,6 +23,7 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import addServiceValidation from "../../validations/control_validations/AddServiceValidation";
 import { Duration } from "../../utils/CommonFunction";
 import usePatch from "../../hooks/usePatch";
+import dayjs from "dayjs";
 
 const style = {
   position: "absolute",
@@ -108,7 +109,9 @@ const AddService = ({ data, refetch, open, onClose }) => {
         ...values,
         areaInSquareMeters: Number(values?.areaInSquareMeters),
         cleaningCoupon: couponCodeValue,
+        startDate : dayjs(values?.startDate),
       };
+     
 
       if (data?._id) {
         await updateMutate(payload);
