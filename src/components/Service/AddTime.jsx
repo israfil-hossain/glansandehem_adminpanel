@@ -23,9 +23,13 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import addCouponValidationSchema from "../../validations/control_validations/AddCouponValidation";
 import addTimeValidationSchema from "../../validations/service_validations/AddTimeValidation";
 import { formatDatewithTime } from "../../utils/CommonFunction";
-import dayjs from "dayjs";
 import usePatch from "../../hooks/usePatch";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import advancedFormat from "dayjs/plugin/advancedFormat";
 
+dayjs.extend(utc);
+dayjs.extend(advancedFormat);
 const style = {
   position: "absolute",
   top: "50%",
@@ -39,7 +43,7 @@ const style = {
   p: 4,
 };
 const AddTime = ({ data, refetch, open, onClose }) => {
-  // console.log({data})
+  const currentDateTimeLocal = dayjs().format("YYYY-MM-DDTHH:mm");
   // Update Mutation ....
   const { mutateAsync: updateMutate, isLoading: updateLoading } = usePatch({
     endpoint: API.UpdateBooking + `/${data?._id}`, // Replace with your actual API endpoint
@@ -57,9 +61,9 @@ const AddTime = ({ data, refetch, open, onClose }) => {
   // Handle Submit Function .....
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-     
-        await updateMutate(values);
       
+      await updateMutate(values);
+
       setSubmitting(false);
       resetForm();
     } catch (e) {
@@ -88,9 +92,9 @@ const AddTime = ({ data, refetch, open, onClose }) => {
             <div>
               <Formik
                 initialValues={{
-                  cleaningDate: dayjs( data?.currentBooking?.cleaningDate).format(
-                    "YYYY-MM-DDTHH:mm"
-                  ),
+                  cleaningDate: dayjs(
+                    data?.currentBooking?.cleaningDate
+                  ).format("YYYY-MM-DDTHH:mm"),
                 }}
                 validationSchema={addTimeValidationSchema}
                 onSubmit={handleSubmit}
@@ -102,6 +106,7 @@ const AddTime = ({ data, refetch, open, onClose }) => {
                   touched,
                   isSubmitting,
                   resetForm,
+                  setFieldValue
                 }) => (
                   <Form>
                     {/* <>{JSON.stringify(values)}</> */}
@@ -141,14 +146,9 @@ const AddTime = ({ data, refetch, open, onClose }) => {
 
                     <div className="mt-4 pb-3">
                       <div
-                        className={`appearance-none  block border rounded-lg py-2 px-5
-                            ${
-                              touched.cleaningDate && errors.cleaningDate
-                                ? "border-red-500"
-                                : ""
-                            }`}
+                       
                       >
-                        <Field
+                        {/* <Field
                           name="cleaningDate"
                           id="cleaningDate"
                           label="Cleaning Time :"
@@ -159,7 +159,34 @@ const AddTime = ({ data, refetch, open, onClose }) => {
                           onChange={handleChange}
                           value={values.cleaningDate}
                           error={touched.cleaningDate && errors.cleaningDate}
+                        /> */}
+                        <Field
+                          id="date-time"
+                          type="datetime-local"
+                          name="cleaningDate"
+                          className={`py-3 px-5 border w-full my-3 rounded-lg${
+                            touched.cleaningDate && errors.cleaningDate
+                              ? "border-red-500"
+                              : ""
+                          }`}
+                          min={currentDateTimeLocal}
+                          value={dayjs(values.cleaningDate).format(
+                            "YYYY-MM-DDTHH:mm"
+                          )}
+                          onChange={(e) => {
+                            const localDate = dayjs(e.target.value);
+                            const utcDate = localDate
+                              .utc()
+                              .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+                            setFieldValue("cleaningDate", utcDate);
+                          
+                          }}
                         />
+                        {touched.cleaningDate && errors.cleaningDate && (
+                          <p className="mt-2 text-sm text-red-600 ">
+                            {errors.cleaningDate}
+                          </p>
+                        )}
                       </div>
                       <ErrorMessage
                         name="cleaningDate"

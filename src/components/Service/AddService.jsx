@@ -24,6 +24,11 @@ import addServiceValidation from "../../validations/control_validations/AddServi
 import { Duration } from "../../utils/CommonFunction";
 import usePatch from "../../hooks/usePatch";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
+dayjs.extend(utc);
+dayjs.extend(advancedFormat);
 
 const style = {
   position: "absolute",
@@ -57,8 +62,8 @@ const AddService = ({ data, refetch, open, onClose }) => {
       toast.success("Add Service Successfully !");
       refetch();
       onClose();
-      setCoupon(""); 
-      seetCouponCode(null); 
+      setCoupon("");
+      setCouponCode(null);
     },
     onError: (error) => {
       // Handle update error, e.g., display an error message
@@ -99,7 +104,10 @@ const AddService = ({ data, refetch, open, onClose }) => {
     const payload = {
       couponCode: coupon,
     };
-    await verifyCoupon(payload);
+    if(coupon.length > 0 ){
+      await verifyCoupon(payload);
+    }
+    
   };
 
   // Handle Submit Function .....
@@ -109,9 +117,8 @@ const AddService = ({ data, refetch, open, onClose }) => {
         ...values,
         areaInSquareMeters: Number(values?.areaInSquareMeters),
         cleaningCoupon: couponCodeValue,
-        startDate : dayjs(values?.startDate),
+        startDate: dayjs(values?.startDate),
       };
-     
 
       if (data?._id) {
         await updateMutate(payload);
@@ -125,6 +132,8 @@ const AddService = ({ data, refetch, open, onClose }) => {
       console.log("Error during Create ", e);
     }
   };
+
+  const currentDateTimeLocal = dayjs().format("YYYY-MM-DDTHH:mm");
 
   return (
     <Fragment>
@@ -534,22 +543,28 @@ const AddService = ({ data, refetch, open, onClose }) => {
                       {/* Start Date  */}
                       <div>
                         <Field
-                          name="startDate"
-                          id="startDate"
-                          label="Select Duration"
+                          id="date-time"
                           type="datetime-local"
-                          placeholder="Type here"
-                          component={CommonInputText}
-                          onChange={handleChange}
-                          value={values.startDate}
-                          error={touched.startDate && errors.startDate}
-                          className={`appearance-none  block
-                            ${
-                              touched.startDate && errors.startDate
-                                ? "border-red-500"
-                                : ""
-                            }`}
+                          name="startDate"
+                          className={`py-3 px-5 border w-full mt-3 mb-3 rounded-lg  ${
+                            touched.startDate && errors.startDate
+                              ? "border-red-500"
+                              : ""
+                          }`}
+                          min={currentDateTimeLocal}
+                          value={dayjs(values.startDate).format(
+                            "YYYY-MM-DDTHH:mm"
+                          )}
+                          onChange={(e) => {
+                            const localDate = dayjs(e.target.value);
+                            const utcDate = localDate
+                              .utc()
+                              .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+                            setFieldValue("startDate", utcDate);
+                            // setFormData({ ...formData, startDate: utcDate });
+                          }}
                         />
+
                         <ErrorMessage
                           name="startDate"
                           component="div"
@@ -606,7 +621,7 @@ const AddService = ({ data, refetch, open, onClose }) => {
                           onChange={(e) => setCoupon(e.target.value)}
                         />
                         <div
-                          className="shrink-0 flex py-2 border px-3 rounded-lg bg-black text-white justify-center items-center "
+                          className="shrink-0 flex py-2 border px-3 rounded-lg bg-black text-white justify-center items-center cursor-pointer"
                           onClick={handleCoupon}
                         >
                           {couponLoading && (

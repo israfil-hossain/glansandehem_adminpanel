@@ -25,7 +25,7 @@ import usePatch from "../hooks/usePatch";
 
 const Profile = () => {
   const { userData,userRefetch } = useAuthUserContext();
-  console.log("userData", userData);
+
 
   const [open, setOpen] = useState(false);
 

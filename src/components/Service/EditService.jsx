@@ -42,7 +42,7 @@ const style = {
 };
 const EditService = ({ data, refetch, open, onClose }) => {
  
-  console.log("Edit subscription Data ", data)
+
   const {
     data: subscriptionFrequency = {},
     isLoading: cleaningFrequencyLoading,

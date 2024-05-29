@@ -46,7 +46,6 @@ const ServiceTaken = () => {
     refetch: serviceRefetch,
   } = useQuery([url]);
 
-  console.log("Service Data : ", serviceData)
 
   const handleOpen = () => {
     setOpen(true);
@@ -94,18 +93,18 @@ const ServiceTaken = () => {
   };
 
   // Update Mutation ....
-  const { mutateAsync: CancelServiceMutation, isLoading: cancelLoading } = usePatch({
-    endpoint:
-      API.SkippedUpcomingSubscription + `${serviceData?.data?._id}`, // Replace with your actual API endpoint
-    onSuccess: (data) => {
-      toast.success("Cancel Next Schedule Successfully !");
-      serviceRefetch();
-    },
-    onError: (error) => {
-      // Handle update error, e.g., display an error message
-      toast.error(error?.response?.data?.message);
-    },
-  });
+  const { mutateAsync: CancelServiceMutation, isLoading: cancelLoading } =
+    usePatch({
+      endpoint: API.SkippedUpcomingSubscription + `${serviceData?.data?._id}`, // Replace with your actual API endpoint
+      onSuccess: (data) => {
+        toast.success("Cancel Next Schedule Successfully !");
+        serviceRefetch();
+      },
+      onError: (error) => {
+        // Handle update error, e.g., display an error message
+        toast.error(error?.response?.data?.message);
+      },
+    });
 
   const handleCancel = async () => {
     if (serviceData?.data?.nextScheduleDate) {
@@ -131,309 +130,330 @@ const ServiceTaken = () => {
           </Link>
         </Breadcrumbs>
       </PackageBreadcrumb>
-      {
-        serviceLoading && <CommonProgress />
-      }
-
-      <div className="mt-0">
-        <div className="bg-white rounded-lg py-5 px-5">
-          <p className="text-lg font-bold text-tertiary ">
-            Subscription User Information{" "}
-          </p>
-          <div className="grid lg:grid-cols-2 grid-cols-1 bg-white mt-5 gap-5">
-            <div>
-              <GridCard
-                title={"User Name"}
-                value={serviceData?.data?.subscribedUser?.fullName}
-              />
-              <GridCard
-                title={"Email "}
-                value={serviceData?.data?.subscribedUser?.email}
-              />
-              <GridCard
-                title={"Contact Number"}
-                value={serviceData?.data?.subscribedUser?.phoneNumber}
-              />
-            </div>
-            <div>
-              <GridCard
-                title={"Service Register Date"}
-                value={formatDatewithTime(
-                  serviceData?.data?.subscribedUser?.dateJoined
-                )}
-              />
-              <GridCard
-                title={"Address"}
-                value={serviceData?.data?.subscribedUser?.address}
-              />
-              <GridCard
-                title={"Postal Code"}
-                value={serviceData?.data?.postalCode}
-              />
-              <GridCard
-                title={"Personal ID Number "}
-                value={serviceData?.data?.subscribedUser?.pidNumber}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg py-5 px-5 mt-5">
-          <div className="flex justify-between items-center">
-            <p className="text-lg font-bold text-tertiary ">
-              Subscription Details{" "}
-            </p>
-            <div className="p-1">
-              <button
-                className="py-2 bg-[#020a38] text-white rounded-lg px-4 mb-2"
-                onClick={handleServiceOpen}
-              >
-                Edit Details
-              </button>
-            </div>
-          </div>
-          <div className="grid lg:grid-cols-2 grid-cols-1 bg-white mt-5 gap-5 ">
-            <div>
-              <GridCard
-                title={"Service Taken"}
-                value={serviceData?.data?.subscriptionFrequency}
-              />
-              <GridCard
-                title={"Cleaning Duration "}
-                value={serviceData?.data?.cleaningDurationInHours + " Hours"}
-              />
-              <div className="flex space-x-2 items-center justify-between mb-4">
-                <div className="w-96 flex-col space-y-4 ">
+      {serviceLoading ? (
+        <CommonProgress />
+      ) : (
+        <div>
+          <div className="mt-0">
+            <div className="bg-white rounded-lg py-5 px-5">
+              <p className="text-lg font-bold text-tertiary ">
+                Subscription User Information{" "}
+              </p>
+              <div className="grid lg:grid-cols-2 grid-cols-1 bg-white mt-5 gap-5">
+                <div>
                   <GridCard
-                    title={"Cleaning Date"}
-                    value={formatDateString(
-                      serviceData?.data?.currentBooking?.cleaningDate
+                    title={"User Name"}
+                    value={serviceData?.data?.subscribedUser?.fullName}
+                  />
+                  <GridCard
+                    title={"Email "}
+                    value={serviceData?.data?.subscribedUser?.email}
+                  />
+                  <GridCard
+                    title={"Contact Number"}
+                    value={serviceData?.data?.subscribedUser?.phoneNumber}
+                  />
+                </div>
+                <div>
+                  <GridCard
+                    title={"Service Register Date"}
+                    value={formatDatewithTime(
+                      serviceData?.data?.subscribedUser?.dateJoined
                     )}
                   />
-                  <div className="bg-[#EFF6FF] w-96 px-5 ml-2 flex gap-5 py-2 ">
-                    <h2 className=" font-semibold text-[14px]">
-                      Cleaning Time :
-                    </h2>
-                    <h2 className=" font-normal text-[16px]">
-                      {formatTime(
-                        dayjs(serviceData?.data?.currentBooking?.cleaningDate)
-                      )}{" "}
-                      {" - "}
-                      {formatTime(
-                        dayjs(
+                  <GridCard
+                    title={"Address"}
+                    value={serviceData?.data?.subscribedUser?.address}
+                  />
+                  <GridCard
+                    title={"Postal Code"}
+                    value={serviceData?.data?.postalCode}
+                  />
+                  <GridCard
+                    title={"Personal ID Number "}
+                    value={serviceData?.data?.subscribedUser?.pidNumber}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg py-5 px-5 mt-5">
+              <div className="flex justify-between items-center">
+                <p className="text-lg font-bold text-tertiary ">
+                  Subscription Details{" "}
+                </p>
+                <div className="p-1">
+                  <button
+                    className="py-2 bg-[#020a38] text-white rounded-lg px-4 mb-2"
+                    onClick={handleServiceOpen}
+                  >
+                    Edit Details
+                  </button>
+                </div>
+              </div>
+              <div className="grid lg:grid-cols-2 grid-cols-1 bg-white mt-5 gap-5 ">
+                <div>
+                  <GridCard
+                    title={"Service Taken"}
+                    value={serviceData?.data?.subscriptionFrequency}
+                  />
+                  <GridCard
+                    title={"Cleaning Duration "}
+                    value={
+                      serviceData?.data?.cleaningDurationInHours + " Hours"
+                    }
+                  />
+                  <div className="flex space-x-2 items-center justify-between mb-4">
+                    <div className="w-96 flex-col space-y-4 ">
+                      <GridCard
+                        title={"Cleaning Date"}
+                        value={formatDateString(
                           serviceData?.data?.currentBooking?.cleaningDate
-                        ).add(
-                          serviceData?.data?.cleaningDurationInHours,
-                          "hour"
-                        )
-                      )}
+                        )}
+                      />
+                      <div className="bg-[#EFF6FF] w-96 px-5 ml-2 flex gap-5 py-2 ">
+                        <h2 className=" font-semibold text-[14px]">
+                          Cleaning Time :
+                        </h2>
+                        <h2 className=" font-normal text-[16px]">
+                          {formatTime(
+                            dayjs(
+                              serviceData?.data?.currentBooking?.cleaningDate
+                            )
+                          )}{" "}
+                          {" - "}
+                          {formatTime(
+                            dayjs(
+                              serviceData?.data?.currentBooking?.cleaningDate
+                            ).add(
+                              serviceData?.data?.cleaningDurationInHours,
+                              "hour"
+                            )
+                          )}
+                        </h2>
+                      </div>
+                    </div>
+
+                    <div
+                      className="cursor-pointer  flex space-x-3 text-center items-center rounded-md border w-24 h-10 px-3 py-1 shadow-sm bg-gray-50 hover:bg-indigo-50"
+                      onClick={handleOpen}
+                    >
+                      <MdEdit
+                        size={18}
+                        className="w-6 h-6 text-indigo-600 bg-gray-300 rounded-full p-1"
+                      />
+                      <p className="text-sm text-indigo-600 ">Edit</p>
+                    </div>
+                  </div>
+
+                  <GridCard
+                    title={"Area in SquareMete "}
+                    value={`${serviceData?.data?.areaInSquareMeters}  m2`}
+                  />
+                  <GridCard
+                    title={"Address"}
+                    value={serviceData?.data?.subscribedUser?.address}
+                  />
+                </div>
+                <div>
+                  <GridCard
+                    title={"Personal ID Number "}
+                    value={serviceData?.data?.subscribedUser?.pidNumber}
+                  />
+                  <GridCard
+                    title={"Has Dogs"}
+                    value={serviceData?.data?.hasDogs ? "YES" : "NO"}
+                  />
+                  <GridCard
+                    title={"Has Cats"}
+                    value={serviceData?.data?.hasCats ? "YES" : "NO"}
+                  />
+                  <GridCard
+                    title={"Has Other Pets"}
+                    value={serviceData?.data?.hasOtherPets ? "YES" : "NO"}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg py-5 px-5 mt-5">
+              <p className="text-lg font-bold text-tertiary ">
+                Booking Details{" "}
+              </p>
+              <div className="grid lg:grid-cols-2 grid-cols-1 bg-white mt-5 gap-5 ">
+                <div>
+                  <GridCard
+                    title={"Cleaning Duration"}
+                    value={
+                      serviceData?.data?.currentBooking?.cleaningDuration +
+                      " Hour"
+                    }
+                  />
+                  <GridCard
+                    title={"Cleaning Price"}
+                    value={
+                      serviceData?.data?.currentBooking?.cleaningPrice + " kr"
+                    }
+                  />
+                  <div className="flex space-x-2 items-center ">
+                    <GridCard
+                      title={"Additional Charge"}
+                      value={
+                        serviceData?.data?.currentBooking?.additionalCharges +
+                        " kr"
+                      }
+                    />
+                    <div
+                      className="cursor-pointer  flex space-x-3 text-center items-center rounded-md border w-24 h-10 px-3 py-1 shadow-sm bg-gray-50 hover:bg-indigo-50"
+                      onClick={handleAdditionOpen}
+                    >
+                      <MdEdit
+                        size={18}
+                        className="w-6 h-6 text-indigo-600 bg-gray-300 rounded-full p-1"
+                      />
+                      <p className="text-sm text-indigo-600 ">Add </p>
+                    </div>
+                  </div>
+                  <GridCard
+                    title={"Additional Charge Description"}
+                    value={serviceData?.data?.currentBooking?.remarks || "N/A"}
+                  />
+
+                  <GridCard
+                    title={"Discount Amount "}
+                    value={`${serviceData?.data?.currentBooking?.discountAmount}  kr`}
+                  />
+                  <GridCard
+                    title={"VAT"}
+                    value={serviceData?.data?.currentBooking?.vatAmount + " kr"}
+                  />
+                </div>
+                <div>
+                  <GridCard
+                    title={"Supplies Charge"}
+                    value={
+                      serviceData?.data?.currentBooking?.suppliesCharges + " kr"
+                    }
+                  />
+                  {serviceData?.data?.currentBooking?.paymentStatus ===
+                  "PaymentCompleted" ? (
+                    <GridCard
+                      title={"Total PAID"}
+                      value={
+                        serviceData?.data?.currentBooking?.totalAmount + " kr"
+                      }
+                    />
+                  ) : (
+                    <GridCard
+                      title={"Total DUE"}
+                      value={
+                        serviceData?.data?.currentBooking?.totalAmount + " kr"
+                      }
+                    />
+                  )}
+
+                  <div className="grid lg:grid-cols-2 grid-cols-1 gap-5 px-5 mt-8">
+                    <div className="flex  space-x-5 items-center">
+                      <p className=" py-1 bg-slate-200  px-4 rounded-lg">
+                        Payment Status :{" "}
+                      </p>
+                      <p
+                        className={`px-3 py-1 text-[12px] font-semibold ${
+                          serviceData?.data?.currentBooking?.paymentStatus ===
+                          "PaymentCompleted"
+                            ? "bg-[#a5f9a9a2] "
+                            : "bg-red-300" // Use the intended background color for confirmed bookings
+                        } rounded-lg`}
+                      >
+                        {serviceData?.data?.currentBooking?.paymentStatus ===
+                        "PaymentCompleted"
+                          ? "Paid"
+                          : "Pending"}
+                      </p>
+                    </div>
+
+                    <div className="flex  space-x-5 items-center">
+                      <p className=" py-1 bg-slate-200  px-3 rounded-lg">
+                        Booking Status :{" "}
+                      </p>
+                      <p
+                        className={`px-3 py-1 text-[12px] font-semibold ${
+                          serviceData?.data?.currentBooking?.bookingStatus ===
+                          "BookingCancelled"
+                            ? "bg-red-300"
+                            : serviceData?.data?.currentBooking
+                                ?.bookingStatus === "BookingServed"
+                            ? "bg-blue-500"
+                            : serviceData?.data?.currentBooking
+                                ?.bookingStatus === "BookingCompleted"
+                            ? "bg-[#a5f9a9a2]" // Use the intended background color for confirmed bookings
+                            : "bg-primary"
+                        } rounded-lg`}
+                      >
+                        {serviceData?.data?.currentBooking?.bookingStatus ===
+                        "BookingCancelled"
+                          ? "Cancelled"
+                          : serviceData?.data?.currentBooking?.bookingStatus ===
+                            "BookingServed"
+                          ? "Served"
+                          : serviceData?.data?.currentBooking?.bookingStatus ===
+                            "BookingCompleted"
+                          ? "Completed" // Use the intended background color for confirmed bookings
+                          : "Processing"}
+                      </p>
+                    </div>
+                  </div>
+                  {serviceData?.data?.currentBooking?.bookingStatus ===
+                    "BookingInitiated" && (
+                    <div className="flex space-x-5  w-96 items-center mt-5 py-2 mx-5 px-5 bg-pink-50 rounded-lg">
+                      <p>Confirmed Booking For This User : </p>
+                      <FormGroup>
+                        <FormControlLabel
+                          disabled={false}
+                          control={
+                            <Switch
+                              checked={isEnabled}
+                              onChange={handleChange}
+                            />
+                          }
+                          label="Confirmed"
+                        />
+                      </FormGroup>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {serviceData?.data?.nextScheduleDate && (
+                <div className="rouded-xl flex  justify-center px-4 py-4 text-center  flex-col">
+                  <div className="bg-indigo-100  text-black py-2 my-2 px-4 lg:flex justify-between ">
+                    <p>Next Schedule :</p>
+                    <p>
+                      {formatDateString(serviceData?.data?.nextScheduleDate) ||
+                        "N/A"}
+                    </p>
+                  </div>
+                  <div className="flex lg:flex-row flex-col space-y-2  bg-indigo-100 px-2 py-2 items-center justify-between space-x-2 font-semibold">
+                    <h2 className="text-[14px] ">
+                      Do you want to Cancel the next Service For this User ?
                     </h2>
+                    <button
+                      className="w-16 h-8 bg-black text-white text-[12px] rounded-lg"
+                      onClick={handleCancel}
+                    >
+                      Yes
+                    </button>
                   </div>
                 </div>
-
-                <div
-                  className="cursor-pointer  flex space-x-3 text-center items-center rounded-md border w-24 h-10 px-3 py-1 shadow-sm bg-gray-50 hover:bg-indigo-50"
-                  onClick={handleOpen}
-                >
-                  <MdEdit
-                    size={18}
-                    className="w-6 h-6 text-indigo-600 bg-gray-300 rounded-full p-1"
-                  />
-                  <p className="text-sm text-indigo-600 ">Edit</p>
-                </div>
-              </div>
-
-              <GridCard
-                title={"Area in SquareMete "}
-                value={`${serviceData?.data?.areaInSquareMeters}  m2`}
-              />
-              <GridCard
-                title={"Address"}
-                value={serviceData?.data?.subscribedUser?.address}
-              />
-            </div>
-            <div>
-              <GridCard
-                title={"Personal ID Number "}
-                value={serviceData?.data?.subscribedUser?.pidNumber}
-              />
-              <GridCard
-                title={"Has Dogs"}
-                value={serviceData?.data?.hasDogs ? "YES" : "NO"}
-              />
-              <GridCard
-                title={"Has Cats"}
-                value={serviceData?.data?.hasCats ? "YES" : "NO"}
-              />
-              <GridCard
-                title={"Has Other Pets"}
-                value={serviceData?.data?.hasOtherPets ? "YES" : "NO"}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg py-5 px-5 mt-5">
-          <p className="text-lg font-bold text-tertiary ">Booking Details </p>
-          <div className="grid lg:grid-cols-2 grid-cols-1 bg-white mt-5 gap-5 ">
-            <div>
-              <GridCard
-                title={"Cleaning Duration"}
-                value={
-                  serviceData?.data?.currentBooking?.cleaningDuration + " Hour"
-                }
-              />
-              <GridCard
-                title={"Cleaning Price"}
-                value={serviceData?.data?.currentBooking?.cleaningPrice + " kr"}
-              />
-              <div className="flex space-x-2 items-center ">
-                <GridCard
-                  title={"Additional Charge"}
-                  value={
-                    serviceData?.data?.currentBooking?.additionalCharges + " kr"
-                  }
-                />
-                <div
-                  className="cursor-pointer  flex space-x-3 text-center items-center rounded-md border w-24 h-10 px-3 py-1 shadow-sm bg-gray-50 hover:bg-indigo-50"
-                  onClick={handleAdditionOpen}
-                >
-                  <MdEdit
-                    size={18}
-                    className="w-6 h-6 text-indigo-600 bg-gray-300 rounded-full p-1"
-                  />
-                  <p className="text-sm text-indigo-600 ">Add </p>
-                </div>
-              </div>
-              <GridCard
-                title={"Additional Charge Description"}
-                value={serviceData?.data?.currentBooking?.remarks || "N/A"}
-              />
-
-              <GridCard
-                title={"Discount Amount "}
-                value={`${serviceData?.data?.currentBooking?.discountAmount}  kr`}
-              />
-              <GridCard
-                title={"VAT"}
-                value={serviceData?.data?.currentBooking?.vatAmount + " kr"}
-              />
-            </div>
-            <div>
-              <GridCard
-                title={"Supplies Charge"}
-                value={
-                  serviceData?.data?.currentBooking?.suppliesCharges + " kr"
-                }
-              />
-              {serviceData?.data?.currentBooking?.paymentStatus ===
-              "PaymentCompleted" ? (
-                <GridCard
-                  title={"Total PAID"}
-                  value={serviceData?.data?.currentBooking?.totalAmount + " kr"}
-                />
-              ) : (
-                <GridCard
-                  title={"Total DUE"}
-                  value={serviceData?.data?.currentBooking?.totalAmount + " kr"}
-                />
-              )}
-
-              <div className="grid lg:grid-cols-2 grid-cols-1 gap-5 px-5 mt-8">
-                <div className="flex  space-x-5 items-center">
-                  <p className=" py-1 bg-slate-200  px-4 rounded-lg">
-                    Payment Status :{" "}
-                  </p>
-                  <p
-                    className={`px-3 py-1 text-[12px] font-semibold ${
-                      serviceData?.data?.currentBooking?.paymentStatus ===
-                      "PaymentCompleted"
-                        ? "bg-[#a5f9a9a2] "
-                        : "bg-red-300" // Use the intended background color for confirmed bookings
-                    } rounded-lg`}
-                  >
-                    {serviceData?.data?.currentBooking?.paymentStatus ===
-                    "PaymentCompleted"
-                      ? "Paid"
-                      : "Pending"}
-                  </p>
-                </div>
-
-                <div className="flex  space-x-5 items-center">
-                  <p className=" py-1 bg-slate-200  px-3 rounded-lg">
-                    Booking Status :{" "}
-                  </p>
-                  <p
-                    className={`px-3 py-1 text-[12px] font-semibold ${
-                      serviceData?.data?.currentBooking?.bookingStatus ===
-                      "BookingCancelled"
-                        ? "bg-red-300"
-                        : serviceData?.data?.currentBooking?.bookingStatus ===
-                          "BookingServed"
-                        ? "bg-blue-500"
-                        : serviceData?.data?.currentBooking?.bookingStatus ===
-                          "BookingCompleted"
-                        ? "bg-[#a5f9a9a2]" // Use the intended background color for confirmed bookings
-                        : "bg-primary"
-                    } rounded-lg`}
-                  >
-                    {serviceData?.data?.currentBooking?.bookingStatus ===
-                    "BookingCancelled"
-                      ? "Cancelled"
-                      : serviceData?.data?.currentBooking?.bookingStatus ===
-                        "BookingServed"
-                      ? "Served"
-                      : serviceData?.data?.currentBooking?.bookingStatus ===
-                        "BookingCompleted"
-                      ? "Completed" // Use the intended background color for confirmed bookings
-                      : "Processing"}
-                  </p>
-                </div>
-              </div>
-              {serviceData?.data?.currentBooking?.bookingStatus ===
-                "BookingInitiated" && (
-                <div className="flex space-x-5  w-96 items-center mt-5 py-2 mx-5 px-5 bg-pink-50 rounded-lg">
-                  <p>Confirmed Booking For This User : </p>
-                  <FormGroup>
-                    <FormControlLabel
-                      disabled={false}
-                      control={
-                        <Switch checked={isEnabled} onChange={handleChange} />
-                      }
-                      label="Confirmed"
-                    />
-                  </FormGroup>
-                </div>
               )}
             </div>
           </div>
-
-          {serviceData?.data?.nextScheduleDate && (
-            <div className="rouded-xl flex  justify-center px-4 py-4 text-center  flex-col">
-              <div className="bg-indigo-100  text-black py-2 my-2 px-4 lg:flex justify-between ">
-                <p>Next Schedule :</p>
-                <p>
-                  {formatDateString(
-                    serviceData?.data?.nextScheduleDate
-                  ) || "N/A"}
-                </p>
-              </div>
-              <div className="flex lg:flex-row flex-col space-y-2  bg-indigo-100 px-2 py-2 items-center justify-between space-x-2 font-semibold">
-                <h2 className="text-[14px] ">Do you want to Cancel the next Service For this User ?</h2>
-                <button
-                  className="w-16 h-8 bg-black text-white text-[12px] rounded-lg"
-                  onClick={handleCancel}
-                >
-                  Yes
-                </button>
-              </div>
-            </div>
-          )}
+          <div className="px-10 py-5 bg-white mt-8">
+            <EarningsTable id={serviceData?.data?.subscribedUser?._id} />
+          </div>
         </div>
-      </div>
-      <div className="px-10 py-5 bg-white mt-8">
-        <EarningsTable id={serviceData?.data?.subscribedUser?._id} />
-      </div>
+      )}
+
       <AddTime
         open={open}
         onClose={handleClose}
